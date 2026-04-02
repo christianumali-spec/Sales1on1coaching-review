@@ -236,6 +236,19 @@ function findAgentRow(table, name) {
   return null;
 }
 
+function findAllAgentRows(table, name) {
+  const [first, last] = name.split(' ');
+  const rows = [];
+  for (const row of table.rows) {
+    // Check agent name column (col 4) first, fall back to col 0
+    const agentCol = cellVal(row, 4);
+    const col0 = cellVal(row, 0);
+    const check = (agentCol && typeof agentCol === 'string') ? agentCol : (col0 && typeof col0 === 'string' ? col0 : '');
+    if (check.includes(first) && check.includes(last)) rows.push(row);
+  }
+  return rows;
+}
+
 function scanRowMetrics(row) {
   /* Scan an agent row for metrics. Strategy:
      - Percentage values (0 < v < 1) are conversion/attach/LT rates
@@ -295,16 +308,51 @@ async function fetchLiveData() {
     }
 
     // Parse QA data — new hires from qa sheet, tenured from qa_tenured sheet
+    // QA sheet columns: 0=Date (scoring week), 4=Agent, 42=Score, 43=New Score
+    // Each row is one audit — multiple rows per agent across all dates
+    const QA_SCORE_COL = 42;
+    const QA_NEW_SCORE_COL = 43;
+
+    // Build cycle date range for filtering QA rows
+    const curCycle = CYCLES.find(c => c.key === cycleKey);
+    const cycleStart = curCycle ? new Date(curCycle.start) : null;
+    const cycleEnd = curCycle ? new Date(curCycle.end) : null;
+    if (cycleEnd) cycleEnd.setHours(23, 59, 59, 999);
+
+    function isRowInCycle(row) {
+      if (!cycleStart || !cycleEnd) return true; // No filter if no cycle
+      const raw = cellVal(row, 0);
+      if (!raw) return false;
+      // gviz returns dates as Date objects or strings like "Date(y,m,d)" or "M/D/YYYY"
+      let d;
+      if (raw instanceof Date) { d = raw; }
+      else if (typeof raw === 'string') {
+        // Try parsing "M/D" or "M/D/YYYY" format — assume current cycle year
+        const parts = raw.replace(/['"]/g, '').split('/');
+        if (parts.length >= 2) {
+          const yr = parts[2] ? parseInt(parts[2]) : cycleStart.getFullYear();
+          d = new Date(yr, parseInt(parts[0]) - 1, parseInt(parts[1]));
+        }
+      } else if (typeof raw === 'number') {
+        // Google Sheets serial date number
+        d = new Date((raw - 25569) * 86400000);
+      }
+      if (!d || isNaN(d)) return false;
+      return d >= cycleStart && d <= cycleEnd;
+    }
+
     function parseQaSheet(resp, agents) {
       if (!resp || resp.status !== 'ok') return;
       const table = resp.table;
       for (const agent of agents) {
-        const row = findAgentRow(table, agent.name);
-        if (!row) continue;
+        const rows = findAllAgentRows(table, agent.name).filter(isRowInCycle);
+        if (rows.length === 0) continue;
         const scores = [];
-        for (let i = 2; i < row.c.length; i++) {
-          const v = cellVal(row, i);
-          if (typeof v === 'number' && v >= 0 && v <= 100) scores.push(v);
+        for (const row of rows) {
+          // Prefer "New Score" (col 43), fall back to "Score" (col 42)
+          let s = cellVal(row, QA_NEW_SCORE_COL);
+          if (s === null || typeof s !== 'number') s = cellVal(row, QA_SCORE_COL);
+          if (s !== null && typeof s === 'number') scores.push(s);
         }
         const cd = agent.cycles[cycleKey];
         if (scores.length > 0 && cd) {
