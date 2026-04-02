@@ -329,10 +329,13 @@ async function fetchLiveData() {
       if (!agent.cycles.cycle8) continue;
       const p = agent.cycles.cycle8.prev;
       const reasons = [];
-      if (p.conv !== null && p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
-      if (p.attach !== null && p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
-      if (p.qa !== null && p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
-      if (p.calls === 0 && p.conv === null) reasons.push('No calls logged');
+      if (p.conv === null || p.conv === undefined) reasons.push('Conv: no data');
+      else if (p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
+      if (p.attach === null || p.attach === undefined) reasons.push('Attach: no data');
+      else if (p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
+      if (p.qa === null || p.qa === undefined) reasons.push('QA: no data');
+      else if (p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
+      if (p.calls === 0) reasons.push('No calls logged');
       agent.cycles.cycle8.commissionMet = reasons.length === 0 && p.calls > 0;
       agent.cycles.cycle8.commissionReason = reasons.length > 0 ? reasons.join('; ') : null;
     }
@@ -382,12 +385,15 @@ function renderAgent(agent, cycleKey) {
     <div class="no-data"><h3>No data for this cycle</h3><p>This agent does not have coaching data for the selected cycle.</p></div>`;
 
   const p = cd.prev;
-  // Recalculate commission dynamically
+  // Recalculate commission dynamically — null/missing metrics = not qualified
   const reasons = [];
-  if (p.conv !== null && p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
-  if (p.attach !== null && p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
-  if (p.qa !== null && p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
-  if (p.calls === 0 && p.conv === null) reasons.push('No calls logged');
+  if (p.conv === null || p.conv === undefined) reasons.push('Conv: no data');
+  else if (p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
+  if (p.attach === null || p.attach === undefined) reasons.push('Attach: no data');
+  else if (p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
+  if (p.qa === null || p.qa === undefined) reasons.push('QA: no data');
+  else if (p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
+  if (p.calls === 0) reasons.push('No calls logged');
   const commMet = reasons.length === 0 && p.calls > 0;
   const commReason = reasons.join('; ');
 
