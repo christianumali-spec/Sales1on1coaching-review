@@ -252,8 +252,19 @@ function scanRowMetrics(row) {
   return { pcts, ints };
 }
 
+function getCurrentCycleKey() {
+  const now = new Date();
+  for (const c of CYCLES) {
+    const start = new Date(c.start), end = new Date(c.end);
+    end.setHours(23, 59, 59, 999);
+    if (now >= start && now <= end) return c.key;
+  }
+  return CYCLES[0].key; // Default to most recent cycle
+}
+
 async function fetchLiveData() {
   const statusEl = document.getElementById('dataStatus');
+  const cycleKey = getCurrentCycleKey();
   try {
     const [convResp, qaResp, attachResp] = await Promise.all([
       fetchSheet('conversion'), fetchSheet('qa'), fetchSheet('attach')
@@ -268,11 +279,11 @@ async function fetchLiveData() {
         const row = findAgentRow(table, agent.name);
         if (!row) continue;
         const m = scanRowMetrics(row);
-        if (agent.cycles.cycle8 && (m.pcts.length > 0 || m.ints.length > 0)) {
-          const p = agent.cycles.cycle8.prev;
-          if (m.pcts.length > 0) p.conv = m.pcts[m.pcts.length - 1]; // Last pct in personal area
+        const cd = agent.cycles[cycleKey];
+        if (cd && (m.pcts.length > 0 || m.ints.length > 0)) {
+          const p = cd.prev;
+          if (m.pcts.length > 0) p.conv = m.pcts[m.pcts.length - 1];
           if (m.ints.length >= 2) {
-            // Larger int = calls, smaller = wins (heuristic)
             const sorted = [...m.ints].sort((a, b) => b - a);
             p.calls = sorted[0];
             p.wins = sorted[1];
@@ -288,16 +299,16 @@ async function fetchLiveData() {
       for (const agent of AGENTS) {
         const row = findAgentRow(table, agent.name);
         if (!row) continue;
-        // Scan for QA scores (numbers between 0-100)
         const scores = [];
         for (let i = 2; i < row.c.length; i++) {
           const v = cellVal(row, i);
           if (typeof v === 'number' && v >= 0 && v <= 100) scores.push(v);
         }
-        if (scores.length > 0 && agent.cycles.cycle8) {
+        const cd = agent.cycles[cycleKey];
+        if (scores.length > 0 && cd) {
           const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-          agent.cycles.cycle8.prev.qa = Math.round(avg * 100) / 100;
-          agent.cycles.cycle8.prev.qaCount = scores.length;
+          cd.prev.qa = Math.round(avg * 100) / 100;
+          cd.prev.qaCount = scores.length;
           updated++;
         }
       }
@@ -309,15 +320,15 @@ async function fetchLiveData() {
       for (const agent of AGENTS) {
         const row = findAgentRow(table, agent.name);
         if (!row) continue;
-        if (agent.cycles.cycle8) {
-          const attachVal = cellVal(row, 12); // Column M = All-In Attach %
-          const ltVal = cellVal(row, 15);     // Column P = Lawn Treatment %
+        const cd = agent.cycles[cycleKey];
+        if (cd) {
+          const attachVal = cellVal(row, 12);
+          const ltVal = cellVal(row, 15);
           if (attachVal !== null && typeof attachVal === 'number') {
-            // Google Sheets returns percentages as decimals (0.50 = 50%) or whole numbers (50 = 50%)
-            agent.cycles.cycle8.prev.attach = attachVal > 1 ? attachVal / 100 : attachVal;
+            cd.prev.attach = attachVal > 1 ? attachVal / 100 : attachVal;
           }
           if (ltVal !== null && typeof ltVal === 'number') {
-            agent.cycles.cycle8.prev.lt = ltVal > 1 ? ltVal / 100 : ltVal;
+            cd.prev.lt = ltVal > 1 ? ltVal / 100 : ltVal;
           }
           updated++;
         }
@@ -326,8 +337,9 @@ async function fetchLiveData() {
 
     // Recalculate commission for all agents based on live data + thresholds
     for (const agent of AGENTS) {
-      if (!agent.cycles.cycle8) continue;
-      const p = agent.cycles.cycle8.prev;
+      const cd = agent.cycles[cycleKey];
+      if (!cd) continue;
+      const p = cd.prev;
       const reasons = [];
       if (p.conv === null || p.conv === undefined) reasons.push('Conv: no data');
       else if (p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
@@ -336,8 +348,8 @@ async function fetchLiveData() {
       if (p.qa === null || p.qa === undefined) reasons.push('QA: no data');
       else if (p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
       if (p.calls === 0) reasons.push('No calls logged');
-      agent.cycles.cycle8.commissionMet = reasons.length === 0 && p.calls > 0;
-      agent.cycles.cycle8.commissionReason = reasons.length > 0 ? reasons.join('; ') : null;
+      cd.commissionMet = reasons.length === 0 && p.calls > 0;
+      cd.commissionReason = reasons.length > 0 ? reasons.join('; ') : null;
     }
 
     if (updated > 0) {
@@ -481,6 +493,12 @@ async function init() {
   // Attempt live data fetch, then re-render
   const gotLive = await fetchLiveData();
   if (gotLive) { renderTabs(); renderContent(); }
+
+  // Auto-refresh every 5 minutes to pick up new spreadsheet data
+  setInterval(async () => {
+    const refreshed = await fetchLiveData();
+    if (refreshed) { renderTabs(); renderContent(); }
+  }, 5 * 60 * 1000);
 }
 
 init();
