@@ -6,179 +6,82 @@
 <title>Lawn District — Sales 1-on-1 Coaching Review</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: #0f1117;
-    color: #e0e0e0;
-    min-height: 100vh;
-  }
-
-  .topbar {
-    background: linear-gradient(135deg, #1a1d2e 0%, #252940 100%);
-    padding: 20px 32px;
-    border-bottom: 1px solid #2a2d3e;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .topbar-left h1 { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-  .topbar-left p { font-size: 13px; color: #8b8fa3; margin-top: 2px; }
-  .topbar-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .filter-group {
-    display: flex; align-items: center; gap: 8px;
-    background: #2a2d3e; border: 1px solid #3a3d4e; border-radius: 8px;
-    padding: 8px 14px; font-size: 13px; color: #a0a4b8;
-  }
-  .filter-group label { font-weight: 600; }
-  .filter-group select {
-    background: #1a1d2e; border: 1px solid #3a3d4e; border-radius: 6px;
-    padding: 6px 10px; color: #fff; font-size: 13px;
-    font-family: 'Inter', system-ui, sans-serif; cursor: pointer; appearance: auto;
-  }
-
-  .agent-tabs {
-    display: flex; flex-wrap: wrap; gap: 6px; padding: 16px 32px;
-    background: #13151f; border-bottom: 1px solid #1e2030; overflow-x: auto;
-  }
-  .agent-tab {
-    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
-    cursor: pointer; background: #1a1d2e; color: #8b8fa3;
-    border: 1px solid transparent; transition: all 0.2s; white-space: nowrap;
-  }
-  .agent-tab:hover { background: #252940; color: #c0c4d8; }
-  .agent-tab.active { background: #3b82f6; color: #fff; border-color: #5b9cf6; }
-  .agent-tab.training::after { content: ' \u2605'; color: #f59e0b; font-size: 11px; }
-  .agent-tab.active.training::after { color: #fde68a; }
-
-  .filter-bar {
-    display: flex; gap: 8px; padding: 12px 32px; background: #13151f;
-    border-bottom: 1px solid #1e2030; align-items: center; flex-wrap: wrap;
-  }
-  .filter-btn {
-    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
-    cursor: pointer; background: #1a1d2e; color: #8b8fa3;
-    border: 1px solid #2a2d3e; transition: all 0.2s;
-  }
-  .filter-btn:hover { background: #252940; color: #c0c4d8; }
-  .filter-btn.active { background: #3b82f6; color: #fff; border-color: #5b9cf6; }
-  .filter-label { font-size: 12px; font-weight: 600; color: #8b8fa3; margin-right: 4px; }
-
-  .content { padding: 24px 32px; max-width: 1100px; margin: 0 auto; }
-
-  .agent-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .agent-avatar {
-    width: 52px; height: 52px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 800; color: #fff;
-  }
-  .agent-header h2 { font-size: 24px; font-weight: 800; color: #fff; }
-  .agent-header .subtitle { font-size: 13px; color: #8b8fa3; }
-  .hire-badge {
-    display: inline-block; padding: 2px 8px; border-radius: 4px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-left: 8px;
-  }
-  .hire-badge.new-hire { background: #f59e0b22; color: #fbbf24; border: 1px solid #f59e0b55; }
-  .hire-badge.tenured { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f655; }
-  .commission-badge {
-    margin-left: auto; padding: 6px 14px; border-radius: 20px;
-    font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
-  }
-  .commission-badge.met { background: #16a34a22; color: #4ade80; border: 1px solid #16a34a55; }
-  .commission-badge.not-met { background: #dc262622; color: #f87171; border: 1px solid #dc262655; }
-
-  .metrics-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px; margin-bottom: 28px;
-  }
-  .metric-card {
-    background: #1a1d2e; border: 1px solid #2a2d3e; border-radius: 12px; padding: 18px;
-  }
-  .metric-card .label {
-    font-size: 12px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.8px; color: #8b8fa3; margin-bottom: 8px;
-  }
-  .metric-card .value { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
-  .metric-card .detail { font-size: 12px; color: #8b8fa3; }
-  .met-color { color: #4ade80; }
-  .not-met-color { color: #f87171; }
-  .neutral-color { color: #fbbf24; }
-
-  .section-title {
-    font-size: 16px; font-weight: 700; color: #fff;
-    margin: 28px 0 14px; display: flex; align-items: center; gap: 8px;
-  }
-  .insights-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 14px; margin-bottom: 14px;
-  }
-  .insight-card { background: #1a1d2e; border-radius: 12px; padding: 18px; border-left: 4px solid; }
-  .insight-card.great { border-color: #4ade80; }
-  .insight-card.improve { border-color: #f87171; }
-  .insight-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-  .insight-card.great h4 { color: #4ade80; }
-  .insight-card.improve h4 { color: #f87171; }
-  .insight-card p { font-size: 13px; color: #b0b4c8; line-height: 1.5; }
-
-  .qa-quotes { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-  .qa-quote {
-    background: #1a1d2e; border: 1px solid #2a2d3e; border-radius: 10px;
-    padding: 14px 18px; display: flex; align-items: flex-start; gap: 12px;
-  }
-  .qa-quote .rating-dot {
-    width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
-  }
-  .rating-excellent { background: #4ade80; }
-  .rating-good { background: #3b82f6; }
-  .rating-ni { background: #f87171; }
-  .qa-quote .quote-text { font-size: 13px; color: #b0b4c8; line-height: 1.5; }
-  .qa-quote .quote-rating {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.5px; margin-top: 4px;
-  }
-
-  .action-items {
-    background: #1a1d2e; border: 1px solid #2a2d3e; border-radius: 12px;
-    padding: 18px; margin-bottom: 20px;
-  }
-  .action-items h4 { font-size: 14px; font-weight: 700; color: #fbbf24; margin-bottom: 10px; }
-  .action-items ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .action-items li {
-    font-size: 13px; color: #b0b4c8; padding-left: 20px;
-    position: relative; line-height: 1.5;
-  }
-  .action-items li::before {
-    content: '\2192'; position: absolute; left: 0; color: #fbbf24; font-weight: 700;
-  }
-
-  .form-cta {
-    display: block; text-align: center; margin: 24px 0 40px; padding: 16px 28px;
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-    color: #fff; font-size: 15px; font-weight: 700; border-radius: 12px;
-    text-decoration: none; transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 20px #3b82f644;
-  }
-  .form-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 28px #3b82f666; }
-
-  .no-data { text-align: center; padding: 60px 20px; color: #8b8fa3; }
-  .no-data h3 { font-size: 18px; color: #fff; margin-bottom: 8px; }
-  .no-data p { font-size: 14px; }
-
-  @media (max-width: 700px) {
-    .topbar, .agent-tabs, .content, .filter-bar { padding-left: 16px; padding-right: 16px; }
-    .metrics-grid { grid-template-columns: 1fr 1fr; }
-    .insights-grid { grid-template-columns: 1fr; }
-    .agent-header h2 { font-size: 20px; }
-    .commission-badge { margin-left: 0; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
+  .topbar{background:linear-gradient(135deg,#1a1d2e,#252940);padding:20px 32px;border-bottom:1px solid #2a2d3e;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .topbar-left h1{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px}
+  .topbar-left p{font-size:13px;color:#8b8fa3;margin-top:2px}
+  .topbar-right{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .filter-group{display:flex;align-items:center;gap:8px;background:#2a2d3e;border:1px solid #3a3d4e;border-radius:8px;padding:8px 14px;font-size:13px;color:#a0a4b8}
+  .filter-group label{font-weight:600}
+  .filter-group select{background:#1a1d2e;border:1px solid #3a3d4e;border-radius:6px;padding:6px 10px;color:#fff;font-size:13px;font-family:'Inter',system-ui,sans-serif;cursor:pointer;appearance:auto}
+  .data-status{font-size:11px;padding:4px 10px;border-radius:6px;font-weight:600;display:flex;align-items:center;gap:5px}
+  .data-status .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .data-status.live{background:#16a34a22;color:#4ade80;border:1px solid #16a34a55}
+  .data-status.live .dot{background:#4ade80}
+  .data-status.cached{background:#f59e0b22;color:#fbbf24;border:1px solid #f59e0b55}
+  .data-status.cached .dot{background:#fbbf24}
+  .data-status.loading{background:#3b82f622;color:#60a5fa;border:1px solid #3b82f655}
+  .data-status.loading .dot{background:#60a5fa;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .agent-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:16px 32px;background:#13151f;border-bottom:1px solid #1e2030;overflow-x:auto}
+  .agent-tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#1a1d2e;color:#8b8fa3;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+  .agent-tab:hover{background:#252940;color:#c0c4d8}
+  .agent-tab.active{background:#3b82f6;color:#fff;border-color:#5b9cf6}
+  .agent-tab.training::after{content:' \u2605';color:#f59e0b;font-size:11px}
+  .agent-tab.active.training::after{color:#fde68a}
+  .filter-bar{display:flex;gap:8px;padding:12px 32px;background:#13151f;border-bottom:1px solid #1e2030;align-items:center;flex-wrap:wrap}
+  .filter-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:#1a1d2e;color:#8b8fa3;border:1px solid #2a2d3e;transition:all .2s}
+  .filter-btn:hover{background:#252940;color:#c0c4d8}
+  .filter-btn.active{background:#3b82f6;color:#fff;border-color:#5b9cf6}
+  .filter-label{font-size:12px;font-weight:600;color:#8b8fa3;margin-right:4px}
+  .content{padding:24px 32px;max-width:1100px;margin:0 auto}
+  .agent-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .agent-avatar{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff}
+  .agent-header h2{font-size:24px;font-weight:800;color:#fff}
+  .agent-header .subtitle{font-size:13px;color:#8b8fa3}
+  .hire-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-left:8px}
+  .hire-badge.new-hire{background:#f59e0b22;color:#fbbf24;border:1px solid #f59e0b55}
+  .hire-badge.tenured{background:#3b82f622;color:#60a5fa;border:1px solid #3b82f655}
+  .commission-badge{margin-left:auto;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;letter-spacing:.5px}
+  .commission-badge.met{background:#16a34a22;color:#4ade80;border:1px solid #16a34a55}
+  .commission-badge.not-met{background:#dc262622;color:#f87171;border:1px solid #dc262655}
+  .metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+  .metric-card{background:#1a1d2e;border:1px solid #2a2d3e;border-radius:12px;padding:18px}
+  .metric-card .label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#8b8fa3;margin-bottom:8px}
+  .metric-card .value{font-size:28px;font-weight:800;margin-bottom:4px}
+  .metric-card .detail{font-size:12px;color:#8b8fa3}
+  .met-color{color:#4ade80}.not-met-color{color:#f87171}.neutral-color{color:#fbbf24}
+  .section-title{font-size:16px;font-weight:700;color:#fff;margin:28px 0 14px;display:flex;align-items:center;gap:8px}
+  .insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:14px}
+  .insight-card{background:#1a1d2e;border-radius:12px;padding:18px;border-left:4px solid}
+  .insight-card.great{border-color:#4ade80}.insight-card.improve{border-color:#f87171}
+  .insight-card h4{font-size:14px;font-weight:700;margin-bottom:6px}
+  .insight-card.great h4{color:#4ade80}.insight-card.improve h4{color:#f87171}
+  .insight-card p{font-size:13px;color:#b0b4c8;line-height:1.5}
+  .qa-quotes{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .qa-quote{background:#1a1d2e;border:1px solid #2a2d3e;border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
+  .qa-quote .rating-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0}
+  .rating-excellent{background:#4ade80}.rating-good{background:#3b82f6}.rating-ni{background:#f87171}
+  .qa-quote .quote-text{font-size:13px;color:#b0b4c8;line-height:1.5}
+  .qa-quote .quote-rating{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .action-items{background:#1a1d2e;border:1px solid #2a2d3e;border-radius:12px;padding:18px;margin-bottom:20px}
+  .action-items h4{font-size:14px;font-weight:700;color:#fbbf24;margin-bottom:10px}
+  .action-items ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .action-items li{font-size:13px;color:#b0b4c8;padding-left:20px;position:relative;line-height:1.5}
+  .action-items li::before{content:'\2192';position:absolute;left:0;color:#fbbf24;font-weight:700}
+  .form-cta{display:block;text-align:center;margin:24px 0 40px;padding:16px 28px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:15px;font-weight:700;border-radius:12px;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px #3b82f644}
+  .form-cta:hover{transform:translateY(-2px);box-shadow:0 6px 28px #3b82f666}
+  .no-data{text-align:center;padding:60px 20px;color:#8b8fa3}
+  .no-data h3{font-size:18px;color:#fff;margin-bottom:8px}
+  .no-data p{font-size:14px}
+  .threshold-bar{display:flex;gap:16px;padding:8px 32px;background:#13151f;border-bottom:1px solid #1e2030;font-size:11px;color:#8b8fa3;flex-wrap:wrap}
+  .threshold-bar span{display:flex;align-items:center;gap:4px}
+  .threshold-bar .th-label{font-weight:600;color:#a0a4b8}
+  @media(max-width:700px){.topbar,.agent-tabs,.content,.filter-bar,.threshold-bar{padding-left:16px;padding-right:16px}.metrics-grid{grid-template-columns:1fr 1fr}.insights-grid{grid-template-columns:1fr}.agent-header h2{font-size:20px}.commission-badge{margin-left:0}}
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="topbar-left">
     <h1>Lawn District — Sales 1-on-1 Coaching Review</h1>
@@ -189,978 +92,383 @@
       <label>Cycle:</label>
       <select id="cycleSelect"></select>
     </div>
+    <div class="data-status loading" id="dataStatus"><span class="dot"></span> Loading live data...</div>
   </div>
 </div>
-
+<div class="threshold-bar">
+  <span><span class="th-label">Incentive Thresholds:</span></span>
+  <span>Conv &ge; 17%</span>
+  <span>Attach &ge; 32%</span>
+  <span>LT &ge; 0%</span>
+  <span>QA &ge; 86%</span>
+</div>
 <div class="filter-bar">
   <span class="filter-label">Show:</span>
   <div class="filter-btn active" data-filter="all">All Agents</div>
   <div class="filter-btn" data-filter="tenured">Tenured</div>
   <div class="filter-btn" data-filter="new-hire">New Hires</div>
 </div>
-
 <div class="agent-tabs" id="agentTabs"></div>
 <div class="content" id="agentContent"></div>
 
 <script>
+/* ═══════════════════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════════════════ */
+const THRESHOLDS = { conv: 0.17, attach: 0.32, lt: 0, qa: 86 };
+
+const SHEET_CONFIG = {
+  conversion: { id: '1sO4ZDe-n8-ugc-OsoDisHPXXEAap6b2iINcjsWXz5gU', gid: '761376935' },
+  qa:         { id: '1m3HKkk3i_Ar6y3Eaw30-o1G46_ci7D4XSjYezsLjNcA', gid: '2013393684' },
+  attach:     { id: '1GebFT4WlgV0UUM3esFF_DTvOPOqUGK8_jxra1u9X9mg', gid: '1356439228' }
+};
+
 const CYCLES = [
-  { label: "Cycle 8 (Current) — Mar 29 - Apr 11, 2026", start: "3/29/2026", end: "4/11/2026", key: "cycle8" },
-  { label: "Cycle 7 — Mar 15 - Mar 28, 2026", start: "3/15/2026", end: "3/28/2026", key: "cycle7" },
-  { label: "Cycle 6 — Mar 1 - Mar 14, 2026", start: "3/1/2026", end: "3/14/2026", key: "cycle6" },
-  { label: "Cycle 5 — Feb 15 - Feb 28, 2026", start: "2/15/2026", end: "2/28/2026", key: "cycle5" },
-  { label: "Cycle 4 — Feb 1 - Feb 14, 2026", start: "2/1/2026", end: "2/14/2026", key: "cycle4" },
-  { label: "Cycle 3 — Jan 15 - Jan 31, 2026", start: "1/15/2026", end: "1/31/2026", key: "cycle3" },
-  { label: "Cycle 2 — Jan 1 - Jan 14, 2026", start: "1/1/2026", end: "1/14/2026", key: "cycle2" },
-  { label: "Cycle 1 — Dec 15 - Dec 31, 2025", start: "12/15/2025", end: "12/31/2025", key: "cycle1" }
+  { label: "Cycle 8 (Current) \u2014 Mar 29 - Apr 11, 2026", start: "3/29/2026", end: "4/11/2026", key: "cycle8" },
+  { label: "Cycle 7 \u2014 Mar 15 - Mar 28, 2026", start: "3/15/2026", end: "3/28/2026", key: "cycle7" },
+  { label: "Cycle 6 \u2014 Mar 1 - Mar 14, 2026", start: "3/1/2026", end: "3/14/2026", key: "cycle6" },
+  { label: "Cycle 5 \u2014 Feb 15 - Feb 28, 2026", start: "2/15/2026", end: "2/28/2026", key: "cycle5" },
+  { label: "Cycle 4 \u2014 Feb 1 - Feb 14, 2026", start: "2/1/2026", end: "2/14/2026", key: "cycle4" },
+  { label: "Cycle 3 \u2014 Jan 15 - Jan 31, 2026", start: "1/15/2026", end: "1/31/2026", key: "cycle3" }
 ];
 
+/* ═══════════════════════════════════════════════════════
+   AGENT DATA (static fallback + insights)
+   ═══════════════════════════════════════════════════════ */
 const AGENTS = [
-  /* ═══ TENURED (Christian Umali direct) ═══ */
-  {
-    name: "Alfredo Zozobrado", initials: "AZ", color: "#3b82f6", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.60, calls: 2, wins: 1, attach: 0.50, mow: 4, lt: null, qa: null, qaCount: 0 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "High Conversion Rate", text: "60% conversion this cycle — closing at a very high clip. Even on limited volume, your sales instinct is sharp." },
-            { title: "Strong Attach Rate", text: "50% attach is well above the 35% threshold. You're bundling add-on services effectively when you close." }
-          ],
-          improve: [
-            { title: "Extremely Low Call Volume", text: "Only 2 calls this cycle is a concern. You can't produce results if you're not on the phones. Availability needs to be the top priority." }
-          ],
-          actions: [
-            "PRIORITY: Ensure your schedule allows at least 50+ calls per cycle. Volume is the biggest gap right now.",
-            "Your conversion and attach skills are strong — they just need more opportunities to produce wins.",
-            "Confirm Five9 login and shift availability for the remainder of this cycle."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.2667, calls: 90, wins: 24, attach: 0.2857, mow: 21, lt: 0, qa: 99.25, qaCount: 4 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Excellent", text: "Agent demonstrated thorough product knowledge and maintained professional tone throughout. Excellent pacing and clear explanation of services." },
-          { rating: "Excellent", text: "Outstanding objection handling — addressed pricing concern smoothly and redirected to value proposition." },
-          { rating: "Good", text: "Solid call overall. Could improve on the closing technique — hesitated slightly before asking for the sale, but still converted." },
-          { rating: "Excellent", text: "Perfect call flow and great rapport building. Used customer's name naturally and confirmed all details accurately." }
-        ],
-        insights: {
-          great: [
-            { title: "QA Excellence", text: "99.25% QA average across 4 audits is outstanding — nearly perfect. Your call quality and professionalism are top-tier on the team." },
-            { title: "Solid Conversion", text: "26.67% conversion is well above the 15% bonus threshold. You're closing more than 1 in 4 calls." }
-          ],
-          improve: [
-            { title: "Attach Rate Needs Work", text: "28.57% attach is below the 35% bonus threshold. Focus on presenting upsells earlier in the call." },
-            { title: "Lawn Treatment at 0%", text: "No lawn treatments attached this cycle. Make LT part of your pitch flow." }
-          ],
-          actions: [
-            "Practice your attach pitch — mention add-on services right after the customer confirms mowing.",
-            "Aim for at least 1 lawn treatment per 5 mowing wins.",
-            "Keep your QA standards exactly where they are — you're the benchmark."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Elmer Magalso", initials: "EM", color: "#8b5cf6", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1364, calls: 79, wins: 5, attach: 0.7143, mow: 2, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "Conversion 13.64% below 15% threshold",
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Excellent Attach Rate", text: "71.43% attach rate is the highest on the team this cycle. When you close, you're bundling services exceptionally well." },
-            { title: "High Call Volume", text: "79 calls shows strong work ethic and availability. You're putting in the effort." }
-          ],
-          improve: [
-            { title: "Conversion Dropped", text: "13.64% is below the 15% threshold — down from 20.53% last cycle. With 79 calls and only 5 wins, your closing technique needs sharpening." }
-          ],
-          actions: [
-            "Review your last 5 lost calls — identify the moment customers disengage and practice a recovery technique.",
-            "Your attach skills are elite. Now focus on getting more customers to say yes first.",
-            "Ask for the sale more directly — don't wait for the customer to decide on their own."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.2053, calls: 151, wins: 31, attach: 0.3529, mow: 34, lt: 0.0588, qa: 93.75, qaCount: 4 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Good call — agent covered all key points and handled scheduling question well. Minor opportunity for upselling." },
-          { rating: "Needs Improvement", text: "Missed opportunity when customer said 'I'll think about it' — should have probed deeper." },
-          { rating: "Good", text: "Professional communication. Good use of rebuttals on competitor pricing." },
-          { rating: "Good", text: "Solid execution. Could improve energy level — came across slightly monotone." }
-        ],
-        insights: {
-          great: [
-            { title: "Commission Achieved", text: "Met all bonus thresholds — 20.53% conversion, 35.29% attach, and 93.75% QA." },
-            { title: "High Volume Producer", text: "151 calls is the highest call volume among tenured agents." }
-          ],
-          improve: [
-            { title: "Handle Hesitation Better", text: "QA flagged a missed opportunity when a customer hesitated. Ask follow-up questions to uncover the real concern." },
-            { title: "Energy & Enthusiasm", text: "Monotone delivery noted. Inject more energy early in calls." }
-          ],
-          actions: [
-            "When customer says 'I'll think about it,' respond: 'Absolutely — what specifically would you like to think over?'",
-            "Try standing or smiling during calls to boost vocal energy.",
-            "LT at 5.88% is low — mention lawn treatment on every qualifying call."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Jean Pomperada", initials: "JP", color: "#ec4899", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: null, calls: 0, wins: 0, attach: null, mow: 0, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "No calls logged this cycle",
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Historical QA Excellence", text: "Previous cycle showed 100% QA — when you're on calls, your quality is impeccable." }
-          ],
-          improve: [
-            { title: "Zero Calls Again", text: "No calls logged for a second consecutive cycle. This is a critical availability issue that must be resolved immediately." }
-          ],
-          actions: [
-            "URGENT: Confirm Five9 login, schedule, and system access are all working.",
-            "If absence-related, coordinate with TL to ensure consistent availability.",
-            "Target at least 50 calls next cycle to re-establish momentum."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: null, calls: 0, wins: 0, attach: null, mow: 0, lt: null, qa: 100, qaCount: 2 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Excellent", text: "Flawless call execution. Natural delivery with excellent empathy on cost concerns." },
-          { rating: "Excellent", text: "Outstanding service recovery — turned frustrated customer into a confirmed booking." }
-        ],
-        insights: {
-          great: [
-            { title: "Perfect QA Score", text: "100% QA across 2 audits — the highest on the team." },
-            { title: "Excellent Customer Handling", text: "Empathy, patience, and natural delivery. Rare skills." }
-          ],
-          improve: [
-            { title: "Zero Calls This Cycle", text: "No calls logged means no opportunity to convert." }
-          ],
-          actions: [
-            "Confirm your Five9 login and schedule for next cycle.",
-            "Target at least 40-50 calls to give yourself a fair shot at commission.",
-            "Quality is not the issue — focus purely on availability and volume."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Keryx Macalinao", initials: "KM", color: "#14b8a6", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.2143, calls: 47, wins: 4, attach: 0.5714, mow: 3, lt: null, qa: null, qaCount: 0 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Strong Conversion", text: "21.43% conversion is well above the 15% threshold. Consistent closer." },
-            { title: "Elite Attach Rate", text: "57.14% attach continues to be one of the best on the team. Excellent bundling skills." }
-          ],
-          improve: [
-            { title: "Volume Could Be Higher", text: "47 calls is moderate. Increasing to 60-70 would boost total win count significantly." }
-          ],
-          actions: [
-            "Push for 60+ calls per cycle to maximize your strong conversion rate.",
-            "Continue your attach approach — share technique with teammates.",
-            "Work on pricing confidence — deliver prices as statements, not questions."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.1912, calls: 68, wins: 13, attach: 0.6154, mow: 13, lt: 0.0769, qa: 88, qaCount: 4 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Good performance. Asked qualifying questions and guided customer through booking smoothly." },
-          { rating: "Good", text: "Handled multi-service inquiry well. Slight hesitation on pricing noticed." },
-          { rating: "Good", text: "Consistent quality. All steps followed. Pacing felt slightly rushed." },
-          { rating: "Good", text: "Reliable quality. Verified all details and set proper expectations." }
-        ],
-        insights: {
-          great: [
-            { title: "Attach Rate Star", text: "61.54% attach — highest on the entire team." },
-            { title: "Commission Achieved", text: "Met all thresholds: 19.12% conversion, 61.54% attach, 88% QA." }
-          ],
-          improve: [
-            { title: "Confidence on Pricing", text: "QA noted hesitation on pricing. Own the numbers." },
-            { title: "Call Pacing", text: "Some calls felt rushed. Take a breath between sections." }
-          ],
-          actions: [
-            "Practice pricing delivery — say the price as a statement, not a question.",
-            "Add a 2-second pause after each service option.",
-            "Share your bundling technique with the team."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Lumbani Kanyinji", initials: "LK", color: "#f59e0b", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.25, calls: 33, wins: 2, attach: 0.75, mow: 1, lt: null, qa: null, qaCount: 0 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Strong Conversion", text: "25% conversion is well above threshold. When you're on calls, you close." },
-            { title: "Excellent Attach", text: "75% attach rate — the highest on the team this cycle. Outstanding bundling." }
-          ],
-          improve: [
-            { title: "Very Low Volume", text: "Only 33 calls and 1 mow service is extremely low. Even with great rates, volume limits your total output." }
-          ],
-          actions: [
-            "PRIORITY: Increase availability — aim for 60+ calls per cycle.",
-            "Your conversion and attach are elite. The only thing holding you back is call volume.",
-            "Coordinate schedule to maximize phone time."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.4615, calls: 13, wins: 6, attach: 0.3333, mow: 6, lt: 0, qa: 95, qaCount: 4 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Good product knowledge. Addressed timeline concerns and set expectations well." },
-          { rating: "Good", text: "Nice rapport building. Smooth transition to needs assessment. Closing could improve." },
-          { rating: "Excellent", text: "Agent went above and beyond explaining service guarantee. Customer booked immediately." },
-          { rating: "Needs Improvement", text: "Missed opportunity to offer add-on services on a large property." }
-        ],
-        insights: {
-          great: [
-            { title: "Highest Conversion Rate", text: "46.15% — nearly 1 in 2 calls results in a win." },
-            { title: "Strong QA at 95%", text: "Excellent quality across 4 audits." }
-          ],
-          improve: [
-            { title: "Very Low Call Volume", text: "Only 13 calls limits total output." },
-            { title: "Attach Just Below Threshold", text: "33.33% attach — so close to 35%." }
-          ],
-          actions: [
-            "Prioritize availability — aim for 50+ calls.",
-            "Ask: 'Since we'll already be at your property, would you also like [add-on]?'",
-            "Review the missed upsell on the large property."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Mary Joy Oarde", initials: "MO", color: "#ef4444", training: false, tl: null,
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.25, calls: 33, wins: 2, attach: 0, mow: 5, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "Attach rate 0% below 35% threshold",
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Conversion Improved", text: "25% conversion is a significant jump from 12.26% last cycle. Your closing technique is improving." }
-          ],
-          improve: [
-            { title: "Zero Attach Rate", text: "0% attach is critical. You have 5 mow services with zero add-ons. This must change immediately." },
-            { title: "Volume Still Low", text: "33 calls is well below your 155-call pace last cycle. Need more phone time." }
-          ],
-          actions: [
-            "PRIORITY: After every mowing confirmation, offer at least one add-on service. Make it automatic.",
-            "Your conversion improvement is great — now pair it with attach.",
-            "Increase call volume back to 80+ per cycle."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.1226, calls: 155, wins: 19, attach: 0.2353, mow: 17, lt: 0.0588, qa: 90, qaCount: 4 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Needs Improvement", text: "Needs active listening work — customer repeated address twice." },
-          { rating: "Good", text: "Improved energy. Good product explanation. Closing could be more direct." },
-          { rating: "Good", text: "Handled complex multi-property inquiry well. Details captured accurately." },
-          { rating: "Good", text: "Professional and courteous. Closing technique felt tentative." }
-        ],
-        insights: {
-          great: [
-            { title: "Highest Call Volume", text: "155 calls — the most on the team." },
-            { title: "Good QA Score", text: "90% QA is solid and above 86% threshold." }
-          ],
-          improve: [
-            { title: "Conversion Below Threshold", text: "12.26% is below the 15% bonus threshold." },
-            { title: "Active Listening", text: "Customer had to repeat their address. Stay fully engaged." }
-          ],
-          actions: [
-            "Practice a direct close: 'Let's get you scheduled — does [date] work?'",
-            "Repeat customer details back to show you're listening.",
-            "Improving conversion by just 3% would mean ~5 more wins per cycle."
-          ]
-        }
-      }
-    }
-  },
+  { name:"Alfredo Zozobrado", initials:"AZ", color:"#3b82f6", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:0.60,calls:2,wins:1,attach:0.50,mow:4,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"High Conversion",text:"60% conversion \u2014 strong closing ability even on limited volume."},{title:"Strong Attach",text:"50% attach is well above the 32% threshold. Good bundling."}], improve:[{title:"Extremely Low Volume",text:"Only 2 calls this cycle. You can\u2019t produce results without phone time."}], actions:["PRIORITY: Ensure 50+ calls per cycle.","Your skills are strong \u2014 they just need more opportunities.","Confirm Five9 login and shift availability."] }},
+    cycle7:{ prev:{conv:0.2667,calls:90,wins:24,attach:0.2857,mow:21,lt:0,qa:99.25,qaCount:4}, qaComments:[{rating:"Excellent",text:"Thorough product knowledge. Professional tone throughout."},{rating:"Excellent",text:"Outstanding objection handling on pricing concern."},{rating:"Good",text:"Solid call. Slight hesitation before asking for the sale."},{rating:"Excellent",text:"Perfect call flow and rapport building."}], insights:{ great:[{title:"QA Excellence",text:"99.25% QA across 4 audits \u2014 nearly perfect."},{title:"Solid Conversion",text:"26.67% conversion is well above threshold."}], improve:[{title:"Attach Rate Needs Work",text:"28.57% attach is below the 32% threshold."},{title:"Lawn Treatment at 0%",text:"No lawn treatments this cycle."}], actions:["Practice attach pitch after mowing confirmation.","Aim for 1 LT per 5 mowing wins.","Keep QA standards where they are."] }}
+  }},
+  { name:"Elmer Magalso", initials:"EM", color:"#8b5cf6", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:0.1364,calls:79,wins:5,attach:0.7143,mow:2,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Excellent Attach",text:"71.43% attach \u2014 highest on the team."},{title:"High Volume",text:"79 calls shows strong work ethic."}], improve:[{title:"Conversion Dropped",text:"13.64% is below the 17% threshold \u2014 down from last cycle."}], actions:["Review last 5 lost calls \u2014 identify where customers disengage.","Ask for the sale more directly.","Your attach is elite \u2014 now focus on getting more yeses."] }},
+    cycle7:{ prev:{conv:0.2053,calls:151,wins:31,attach:0.3529,mow:34,lt:0.0588,qa:93.75,qaCount:4}, qaComments:[{rating:"Good",text:"Covered key points well. Minor upselling opportunity."},{rating:"Needs Improvement",text:"Missed opportunity when customer said 'I'll think about it.'"},{rating:"Good",text:"Good rebuttals on competitor pricing."},{rating:"Good",text:"Solid execution. Energy could improve."}], insights:{ great:[{title:"Commission Achieved",text:"Met all thresholds \u2014 20.53% conv, 35.29% attach, 93.75% QA."},{title:"High Volume",text:"151 calls \u2014 highest among tenured."}], improve:[{title:"Handle Hesitation",text:"Probe deeper when customers hesitate."},{title:"Energy",text:"Monotone delivery noted."}], actions:["Respond to 'I'll think about it' with a follow-up question.","Stand or smile during calls for vocal energy.","Mention lawn treatment on every qualifying call."] }}
+  }},
+  { name:"Jean Pomperada", initials:"JP", color:"#ec4899", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:null,calls:0,wins:0,attach:null,mow:0,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Historical QA Excellence",text:"Previous cycle showed 100% QA \u2014 impeccable quality."}], improve:[{title:"Zero Calls Again",text:"No calls for a second cycle. Critical availability issue."}], actions:["URGENT: Confirm Five9 login and schedule.","Coordinate with TL for consistent availability.","Target 50 calls next cycle."] }},
+    cycle7:{ prev:{conv:null,calls:0,wins:0,attach:null,mow:0,lt:null,qa:100,qaCount:2}, qaComments:[{rating:"Excellent",text:"Flawless execution. Natural delivery with excellent empathy."},{rating:"Excellent",text:"Outstanding service recovery \u2014 turned frustrated customer into booking."}], insights:{ great:[{title:"Perfect QA",text:"100% across 2 audits."},{title:"Excellent Handling",text:"Empathy, patience, natural delivery."}], improve:[{title:"Zero Calls",text:"No calls means no opportunity."}], actions:["Confirm Five9 setup.","Target 40-50 calls.","Focus on availability."] }}
+  }},
+  { name:"Keryx Macalinao", initials:"KM", color:"#14b8a6", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:0.2143,calls:47,wins:4,attach:0.5714,mow:3,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Strong Conversion",text:"21.43% \u2014 well above 17% threshold."},{title:"Elite Attach",text:"57.14% attach \u2014 one of the best on the team."}], improve:[{title:"Volume Could Be Higher",text:"47 calls is moderate. Push for 60-70."}], actions:["Push for 60+ calls per cycle.","Continue your attach approach.","Work on pricing confidence."] }},
+    cycle7:{ prev:{conv:0.1912,calls:68,wins:13,attach:0.6154,mow:13,lt:0.0769,qa:88,qaCount:4}, qaComments:[{rating:"Good",text:"Good qualifying questions. Smooth booking guidance."},{rating:"Good",text:"Multi-service inquiry handled well. Slight pricing hesitation."},{rating:"Good",text:"Consistent quality. Pacing slightly rushed."},{rating:"Good",text:"Reliable quality. Proper expectations set."}], insights:{ great:[{title:"Attach Star",text:"61.54% attach \u2014 highest on team."},{title:"Commission Achieved",text:"Met all thresholds."}], improve:[{title:"Pricing Confidence",text:"Hesitation on pricing noted."},{title:"Call Pacing",text:"Some calls rushed."}], actions:["State prices as statements, not questions.","Pause 2 seconds after each service option.","Share bundling technique with team."] }}
+  }},
+  { name:"Lumbani Kanyinji", initials:"LK", color:"#f59e0b", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:0.25,calls:33,wins:2,attach:0.75,mow:1,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Strong Conversion",text:"25% \u2014 well above threshold."},{title:"Excellent Attach",text:"75% attach \u2014 highest on team this cycle."}], improve:[{title:"Low Volume",text:"33 calls limits total output."}], actions:["Increase to 60+ calls per cycle.","Your rates are elite \u2014 volume is the only gap.","Coordinate schedule for max phone time."] }},
+    cycle7:{ prev:{conv:0.4615,calls:13,wins:6,attach:0.3333,mow:6,lt:0,qa:95,qaCount:4}, qaComments:[{rating:"Good",text:"Good product knowledge. Set expectations well."},{rating:"Good",text:"Nice rapport. Smooth needs assessment."},{rating:"Excellent",text:"Above and beyond on service guarantee."},{rating:"Needs Improvement",text:"Missed upsell on large property."}], insights:{ great:[{title:"Highest Conversion",text:"46.15% \u2014 nearly 1 in 2 calls."},{title:"Strong QA",text:"95% across 4 audits."}], improve:[{title:"Low Volume",text:"Only 13 calls."},{title:"Attach Below Threshold",text:"33.33% \u2014 just below 32%."}], actions:["Aim for 50+ calls.","Ask about add-ons on every confirmation.","Review missed upsell."] }}
+  }},
+  { name:"Mary Joy Oarde", initials:"MO", color:"#ef4444", training:false, tl:null, cycles:{
+    cycle8:{ prev:{conv:0.25,calls:33,wins:2,attach:0,mow:5,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Conversion Improved",text:"25% \u2014 big jump from 12.26% last cycle."}], improve:[{title:"Zero Attach",text:"0% attach is critical. 5 mow services with zero add-ons."},{title:"Volume Down",text:"33 calls vs 155 last cycle."}], actions:["PRIORITY: Offer add-ons after every mowing confirmation.","Increase volume back to 80+ calls.","Conversion improvement is great \u2014 now pair with attach."] }},
+    cycle7:{ prev:{conv:0.1226,calls:155,wins:19,attach:0.2353,mow:17,lt:0.0588,qa:90,qaCount:4}, qaComments:[{rating:"Needs Improvement",text:"Active listening issue \u2014 customer repeated address twice."},{rating:"Good",text:"Improved energy. Closing could be more direct."},{rating:"Good",text:"Good multi-property handling."},{rating:"Good",text:"Professional. Closing felt tentative."}], insights:{ great:[{title:"Highest Volume",text:"155 calls \u2014 most on team."},{title:"Good QA",text:"90% \u2014 above 86% threshold."}], improve:[{title:"Conversion Below Threshold",text:"12.26% below 17%."},{title:"Active Listening",text:"Customer had to repeat address."}], actions:["Use direct close: 'Let's get you scheduled.'","Repeat customer details back.","3% improvement = ~5 more wins per cycle."] }}
+  }},
   /* ═══ NEW HIRES ═══ */
-  {
-    name: "Andrie Yanesa", initials: "AY", color: "#06b6d4", training: true, tl: "Katie Glover",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.20, calls: 52, wins: 11, attach: null, mow: null, lt: null, qa: 95, qaCount: 3 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Good energy and rapport. Showing improvement in call control. Skipped value proposition on one call — needs consistency." },
-          { rating: "Excellent", text: "Outstanding improvement — textbook call. Clear intro, proper qualifying, smooth pitch, confident close." },
-          { rating: "Excellent", text: "Excellent conversational tone throughout. Minor gaps in cross-sell delivery with value statements." }
-        ],
-        insights: {
-          great: [
-            { title: "Strong Conversion", text: "20% conversion on 52 calls is excellent for a new hire — well above the 15% threshold." },
-            { title: "QA Excellence", text: "95% QA across 3 audits with two Excellent ratings. Rapid improvement in call quality." }
-          ],
-          improve: [
-            { title: "Pitch Consistency", text: "QA noted you skipped the value proposition on one call. Follow the pitch structure every time until it's second nature." },
-            { title: "Cross-sell Delivery", text: "Minor gaps in cross-sell execution. Add value statements when presenting add-on services." }
-          ],
-          actions: [
-            "After every mowing confirmation: 'Most customers also add [fertilization/leaf removal] — want me to include that?'",
-            "Practice the full pitch flow 3 times before each shift — intro, qualify, value prop, pitch, close.",
-            "Your trajectory is excellent — maintain this pace for early endorsement."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.1774, calls: 62, wins: 11, attach: 0.1111, mow: 9, lt: 0.1111, qa: 92.33, qaCount: 3 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Good energy. Needs pitch structure consistency — skipped value prop." },
-          { rating: "Good", text: "Handled price objection well by redirecting to service quality." },
-          { rating: "Excellent", text: "Textbook call. Clear intro, proper qualifying, smooth pitch, confident close." }
-        ],
-        insights: {
-          great: [
-            { title: "Strong QA at 92.33%", text: "Well above 86% threshold as a new hire." },
-            { title: "Good Conversion", text: "17.74% is solid for a training agent." }
-          ],
-          improve: [
-            { title: "Attach Rate Critical", text: "11.11% attach is very low." },
-            { title: "Pitch Consistency", text: "Skipped value proposition on one call." }
-          ],
-          actions: [
-            "Add attach pitch after every mowing confirmation.",
-            "Practice full pitch flow 3 times before shift.",
-            "LT at 11.11% is good — keep offering lawn treatments."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Cassandra Ramiro", initials: "CR", color: "#a855f7", training: true, tl: "Mae Garcia",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1622, calls: 65, wins: 10, attach: null, mow: null, lt: null, qa: 93.33, qaCount: 3 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Solid call handling. Followed process well and captured all required information. Could improve transitions between sections." },
-          { rating: "Excellent", text: "Strong customer confidence. Handled callback request properly." },
-          { rating: "Good", text: "Good energy and professionalism. Work on making pitch more conversational rather than scripted." }
-        ],
-        insights: {
-          great: [
-            { title: "Consistent Conversion", text: "16.22% conversion on 65 calls — above threshold and steady production." },
-            { title: "QA Excellence", text: "93.33% QA across 3 audits with one Excellent rating. Quality is not a concern." }
-          ],
-          improve: [
-            { title: "Conversational Delivery", text: "QA notes pitch sounds slightly scripted. Talk to the customer, don't read to them." },
-            { title: "Section Transitions", text: "Transitions between call sections could be smoother. Practice natural bridges." }
-          ],
-          actions: [
-            "Practice your pitch without the script — internalize it so it sounds like conversation.",
-            "Use bridge phrases: 'Now that we've covered your lawn, let me share how we can help with...'",
-            "Great volume at 65 calls — maintain this pace."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.2252, calls: 111, wins: 25, attach: 0.3846, mow: 13, lt: 0.0385, qa: 90, qaCount: 2 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Solid call handling. Could improve transitions between sections." },
-          { rating: "Good", text: "Good energy. Work on conversational delivery." }
-        ],
-        insights: {
-          great: [
-            { title: "Strong Conversion", text: "22.52% with 111 calls — excellent for a new hire." },
-            { title: "Near-Threshold Attach", text: "38.46% exceeds the 35% bonus threshold." }
-          ],
-          improve: [
-            { title: "Conversational Delivery", text: "Pitch sounds slightly scripted." },
-            { title: "Low LT Rate", text: "3.85% lawn treatment is low." }
-          ],
-          actions: [
-            "Internalize the pitch so it sounds natural.",
-            "Add lawn treatment as your go-to upsell.",
-            "Great volume — maintain this pace."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Dominique Tabaque", initials: "DT", color: "#f43f5e", training: true, tl: "Katie Glover",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1869, calls: 107, wins: 20, attach: null, mow: null, lt: null, qa: 69, qaCount: 5 },
-        commissionMet: false, commissionReason: "QA 69% below 86% threshold",
-        qaComments: [
-          { rating: "Needs Improvement", text: "Needs improvement on acknowledgement and active listening. Cross-sell execution incomplete." },
-          { rating: "Needs Improvement", text: "Missed several key steps in call flow. Did not verify address or confirm service area." },
-          { rating: "Needs Improvement", text: "Struggled with call control — allowed customer to go off-topic without redirecting." },
-          { rating: "Good", text: "Strong objection handling noted on this call. Improvement seen in greeting and intro script." },
-          { rating: "Needs Improvement", text: "Active listening gaps. Cross-sell section incomplete. Needs consistent structure." }
-        ],
-        insights: {
-          great: [
-            { title: "Conversion Improved Significantly", text: "18.69% conversion on 107 calls — a massive jump from 7.94% last cycle. Your closing is genuinely improving." },
-            { title: "High Call Volume", text: "107 calls shows strong work ethic and dedication to being on the phones." }
-          ],
-          improve: [
-            { title: "QA Critically Below Standard", text: "69% QA across 5 audits — 4 out of 5 rated Needs Improvement. Missing compliance steps is a serious issue." },
-            { title: "Call Structure Still Inconsistent", text: "Address verification, service area confirmation, and cross-sell execution are being skipped regularly." }
-          ],
-          actions: [
-            "URGENT: Have the call flow checklist visible during every call. Check off each step as you complete it.",
-            "Always verify: (1) Name, (2) Address, (3) Service area, (4) Pricing, (5) Proper closing — every single call.",
-            "Your conversion proves you can sell. Now pair that with quality execution to keep the commission.",
-            "Request a 1-on-1 QA remediation session to walk through flagged calls."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.0794, calls: 63, wins: 5, attach: 0.40, mow: 5, lt: 0, qa: 71.33, qaCount: 3 },
-        commissionMet: false, commissionReason: "QA 71.33% below 86% threshold",
-        qaComments: [
-          { rating: "Needs Improvement", text: "Struggled with call control — customer went off-topic without redirect." },
-          { rating: "Needs Improvement", text: "Missed key call flow steps. No address verification or service area confirmation." },
-          { rating: "Good", text: "Improvement seen — proper greeting and intro script. Closing still needs work." }
-        ],
-        insights: {
-          great: [
-            { title: "Decent Attach Rate", text: "40% attach on 5 wins — good foundation." },
-            { title: "Showing Improvement", text: "Latest audit rated Good — up from two NIs." }
-          ],
-          improve: [
-            { title: "Conversion Needs Work", text: "7.94% is well below 15% threshold." },
-            { title: "QA Below Standard", text: "71.33% — missing compliance steps." }
-          ],
-          actions: [
-            "Always verify address and service area — non-negotiable.",
-            "Practice redirecting off-topic customers.",
-            "Shadow a top performer for 30 minutes.",
-            "Focus on completing every call flow step."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Kenneth Banan", initials: "KB", color: "#22c55e", training: true, tl: "Melissa Maier",
-    cycles: {
-      cycle8: {
-        prev: { conv: 1.00, calls: 1, wins: 1, attach: null, mow: null, lt: null, qa: 77.25, qaCount: 4 },
-        commissionMet: false, commissionReason: "QA 77.25% below 86% threshold; insufficient call volume",
-        qaComments: [
-          { rating: "Good", text: "Strong product knowledge. Handled complex multi-service inquiry well. Slightly fast during pricing." },
-          { rating: "Excellent", text: "Confident delivery, perfect pacing, closed a difficult customer. One of the best calls reviewed this cycle." },
-          { rating: "Good", text: "Strong objection handling and promo application. Good instincts." },
-          { rating: "Needs Improvement", text: "Needs improvement on intro probing and detail verification. Missed key qualifying questions." }
-        ],
-        insights: {
-          great: [
-            { title: "Strong Call Quality Potential", text: "One Excellent rating with 'one of the best calls reviewed this cycle' shows your ceiling is very high." },
-            { title: "Good Sales Instincts", text: "Strong objection handling and promo application. You know how to close." }
-          ],
-          improve: [
-            { title: "QA Dropped to 77.25%", text: "Down from 90% last cycle. One NI rating for missing intro probing and detail verification pulled the average down significantly." },
-            { title: "Near-Zero Volume", text: "Only 1 call this cycle is unacceptable. Cannot evaluate performance or produce results without phone time." }
-          ],
-          actions: [
-            "URGENT: Resolve whatever is blocking your call volume — schedule, system access, or availability.",
-            "Focus on consistent intro probing — don't skip qualifying questions even if you feel confident.",
-            "Your skills are there. You need to be on the phones to demonstrate them.",
-            "Target 50+ calls next cycle to get a fair performance picture."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.1781, calls: 73, wins: 13, attach: 0.4286, mow: 14, lt: 0.0714, qa: 90, qaCount: 3 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Strong product knowledge. Slightly fast during pricing section." },
-          { rating: "Good", text: "Consistent performance. Good objection handling on competitor mention." },
-          { rating: "Excellent", text: "Confident delivery, perfect pacing. One of the best calls this cycle." }
-        ],
-        insights: {
-          great: [
-            { title: "Strong All-Around", text: "17.81% conversion, 42.86% attach, 90% QA — exceeding thresholds across the board." },
-            { title: "Excellent Call Quality", text: "Latest audit rated Excellent — tenured-level skill." }
-          ],
-          improve: [
-            { title: "Pacing on Pricing", text: "Slightly fast during pricing. Slow down." },
-            { title: "LT Could Grow", text: "7.14% LT — room to grow." }
-          ],
-          actions: [
-            "Slow down 20% during pricing section.",
-            "Add lawn treatment to every qualifying call.",
-            "On track for early endorsement — maintain this."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Maureen Tolentino", initials: "MT", color: "#d946ef", training: true, tl: "Mae Garcia",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.3871, calls: 10, wins: 3, attach: null, mow: null, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "QA 61% from previous cycle; insufficient volume",
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "Strong Conversion Rate", text: "38.71% conversion shows excellent closing ability. When you're on calls, you convert at a very high rate." }
-          ],
-          improve: [
-            { title: "Extremely Low Volume", text: "Only 10 calls this cycle. Cannot build consistent performance with so few opportunities." },
-            { title: "QA Still a Concern", text: "No new audits this cycle, but previous cycle's 61% QA is still the baseline. Must demonstrate improvement." }
-          ],
-          actions: [
-            "PRIORITY: Increase call volume to 50+ per cycle. You cannot improve if you're not on the phones.",
-            "When you do get on calls, use the call flow checklist every single time.",
-            "Your conversion talent is real — now prove you can pair it with volume and quality."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.1553, calls: 103, wins: 16, attach: 0.1333, mow: 15, lt: 0, qa: 61, qaCount: 2 },
-        commissionMet: false, commissionReason: "QA 61% below 86% threshold",
-        qaComments: [
-          { rating: "Needs Improvement", text: "Multiple compliance steps missed — no address verification, no service confirmation, abrupt ending." },
-          { rating: "Needs Improvement", text: "Polite but lacked structure. Call felt disorganized — jumped between topics." }
-        ],
-        insights: {
-          great: [
-            { title: "Good Call Volume", text: "103 calls shows strong work ethic." }
-          ],
-          improve: [
-            { title: "QA Critically Low", text: "61% — lowest on the team. Both audits flagged compliance issues." },
-            { title: "Call Structure", text: "Calls lack consistent structure." }
-          ],
-          actions: [
-            "URGENT: Call flow checklist visible during every call.",
-            "Always verify: Name, Address, Service area, Pricing, Proper closing.",
-            "Request QA coaching session with TL."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Rona Doque", initials: "RD", color: "#0ea5e9", training: true, tl: "Mae Garcia",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1776, calls: 107, wins: 19, attach: null, mow: null, lt: null, qa: 84.25, qaCount: 4 },
-        commissionMet: false, commissionReason: "QA 84.25% below 86% threshold",
-        qaComments: [
-          { rating: "Excellent", text: "Outstanding product knowledge, confident delivery, seamless objection handling. One of the strongest training agent calls." },
-          { rating: "Excellent", text: "Good rapport building. Strong call control throughout." },
-          { rating: "Needs Improvement", text: "Yes/no questions during cross-sells need refinement. Open-ended questions are more effective." },
-          { rating: "Good", text: "Solid overall. Minor gaps in cross-sell execution but good customer handling." }
-        ],
-        insights: {
-          great: [
-            { title: "High Volume Producer", text: "107 calls — highest among new hires this cycle. You're putting in the work." },
-            { title: "Solid Conversion", text: "17.76% conversion on high volume — steady and reliable." }
-          ],
-          improve: [
-            { title: "QA Just Below Threshold", text: "84.25% is painfully close to the 86% threshold. One NI rating pulled you below. This is fixable." },
-            { title: "Cross-sell Technique", text: "Using yes/no questions during cross-sells limits success. Switch to open-ended questions." }
-          ],
-          actions: [
-            "Instead of 'Would you like lawn treatment?' try 'Which additional service would you like — fertilization or lawn treatment?'",
-            "You're 1.75% away from commission. Tighten up on cross-sell execution and compliance steps.",
-            "Your volume and conversion are strong — QA is the only gap. Focus there.",
-            "Maintain 100+ calls per cycle to keep your production high."
-          ]
-        }
-      },
-      cycle7: {
-        prev: { conv: 0.2784, calls: 97, wins: 27, attach: 0.5517, mow: 29, lt: 0.1724, qa: 95, qaCount: 1 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Excellent", text: "Exceptional call — outstanding product knowledge, confident delivery, seamless objection handling." }
-        ],
-        insights: {
-          great: [
-            { title: "Top Training Performer", text: "27.84% conversion, 55.17% attach, 17.24% LT, 95% QA — top by every metric." },
-            { title: "Exceptional Attach & LT", text: "Both team-leading. Natural bundler." }
-          ],
-          improve: [
-            { title: "Only 1 QA Audit", text: "Small sample. Need more audits to confirm consistency." }
-          ],
-          actions: [
-            "Keep doing what you're doing.",
-            "Consider mentoring newer agents.",
-            "Push for 100+ calls next cycle."
-          ]
-        }
-      }
-    }
-  },
-  /* ═══ NEW NEW HIRES ═══ */
-  {
-    name: "Chivy Llanto", initials: "CL", color: "#fb923c", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1875, calls: 56, wins: 6, attach: null, mow: null, lt: null, qa: 52, qaCount: 1 },
-        commissionMet: false, commissionReason: "QA 52% below 86% threshold",
-        qaComments: [
-          { rating: "Needs Improvement", text: "Needs work on intro probing and policy pause timing. Cross-sell section was incomplete." }
-        ],
-        insights: {
-          great: [
-            { title: "Above-Threshold Conversion", text: "18.75% conversion on 56 calls is a solid start — above the 15% bonus threshold as a brand new hire." }
-          ],
-          improve: [
-            { title: "QA Critically Low", text: "52% on 1 audit is the lowest on the team. Intro probing, policy pauses, and cross-sell execution all need immediate work." }
-          ],
-          actions: [
-            "URGENT: Study the call flow checklist and practice it before every shift.",
-            "Focus on intro probing — ask qualifying questions before jumping to the pitch.",
-            "Complete the cross-sell section on every call — don't skip it even if the customer seems ready to go.",
-            "Request additional QA coaching sessions to get rapid feedback."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Jewel Argullozos", initials: "JA", color: "#c084fc", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.15, calls: 74, wins: 11, attach: null, mow: null, lt: null, qa: 90, qaCount: 1 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [
-          { rating: "Good", text: "Polite and helpful throughout. Audio volume issues noted. Service coverage explanation was incomplete." }
-        ],
-        insights: {
-          great: [
-            { title: "Meeting All Thresholds", text: "15% conversion and 90% QA right out of the gate. Strong start for a new hire." },
-            { title: "Good Call Volume", text: "74 calls shows commitment and availability." }
-          ],
-          improve: [
-            { title: "Audio Quality", text: "QA noted audio volume issues. Check your headset and mic settings — customers need to hear you clearly." },
-            { title: "Service Coverage", text: "Service coverage explanation was incomplete. Make sure you explain all included services." }
-          ],
-          actions: [
-            "Fix audio setup — test headset volume before each shift.",
-            "Practice the full service coverage explanation until it's automatic.",
-            "Push for 80+ calls and aim to improve conversion above 15%.",
-            "Great foundation — keep this trajectory going."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Rufaro Moloi", initials: "RM", color: "#34d399", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: 0.1509, calls: 106, wins: 16, attach: null, mow: null, lt: null, qa: null, qaCount: 0 },
-        commissionMet: true, commissionReason: null,
-        qaComments: [],
-        insights: {
-          great: [
-            { title: "High Call Volume", text: "106 calls — the highest among new hires this cycle alongside Rona and Dominique. Outstanding work ethic." },
-            { title: "Above-Threshold Conversion", text: "15.09% conversion on 106 calls with 16 wins. Meeting the threshold on high volume is impressive for a new hire." }
-          ],
-          improve: [
-            { title: "No QA Data Yet", text: "No audits completed this cycle. Need QA scores to get a full performance picture." }
-          ],
-          actions: [
-            "Request QA audits so we can evaluate your call quality.",
-            "Maintain this call volume — it's exactly where it should be.",
-            "Focus on improving conversion above 18% to maximize your high volume."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Marivic Rahman", initials: "MR", color: "#f472b6", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: null, calls: 0, wins: 0, attach: null, mow: null, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "No data available yet",
-        qaComments: [],
-        insights: {
-          great: [],
-          improve: [
-            { title: "No Data Available", text: "No calls or metrics recorded yet this cycle. May be in onboarding or not yet assigned to the queue." }
-          ],
-          actions: [
-            "Confirm onboarding status and Five9 queue assignment.",
-            "Ensure system access and schedule are set up correctly.",
-            "Target getting on the phones as soon as possible."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Arlene Mendote", initials: "AM", color: "#818cf8", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: null, calls: 0, wins: 0, attach: null, mow: null, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "No data available yet",
-        qaComments: [],
-        insights: {
-          great: [],
-          improve: [
-            { title: "No Data Available", text: "No calls or metrics recorded yet this cycle. May be in onboarding or not yet assigned to the queue." }
-          ],
-          actions: [
-            "Confirm onboarding status and Five9 queue assignment.",
-            "Ensure system access and schedule are set up correctly.",
-            "Target getting on the phones as soon as possible."
-          ]
-        }
-      }
-    }
-  },
-  {
-    name: "Jonelle Laude", initials: "JL", color: "#2dd4bf", training: true, tl: "Christian Umali",
-    cycles: {
-      cycle8: {
-        prev: { conv: null, calls: 0, wins: 0, attach: null, mow: null, lt: null, qa: null, qaCount: 0 },
-        commissionMet: false, commissionReason: "No data available yet",
-        qaComments: [],
-        insights: {
-          great: [],
-          improve: [
-            { title: "No Data Available", text: "No calls or metrics recorded yet this cycle. May be in onboarding or not yet assigned to the queue." }
-          ],
-          actions: [
-            "Confirm onboarding status and Five9 queue assignment.",
-            "Ensure system access and schedule are set up correctly.",
-            "Target getting on the phones as soon as possible."
-          ]
-        }
-      }
-    }
-  }
+  { name:"Andrie Yanesa", initials:"AY", color:"#06b6d4", training:true, tl:"Katie Glover", cycles:{
+    cycle8:{ prev:{conv:0.20,calls:52,wins:11,attach:null,mow:null,lt:null,qa:95,qaCount:3}, qaComments:[{rating:"Good",text:"Good energy. Skipped value prop on one call \u2014 needs consistency."},{rating:"Excellent",text:"Textbook call. Clear intro, proper qualifying, confident close."},{rating:"Excellent",text:"Excellent conversational tone. Minor cross-sell gaps."}], insights:{ great:[{title:"Strong Conversion",text:"20% on 52 calls \u2014 excellent for a new hire."},{title:"QA Excellence",text:"95% across 3 audits with two Excellent ratings."}], improve:[{title:"Pitch Consistency",text:"Skipped value prop on one call."},{title:"Cross-sell Delivery",text:"Add value statements when presenting add-ons."}], actions:["After every mowing confirmation, offer add-ons.","Practice full pitch flow 3x before each shift.","Excellent trajectory \u2014 maintain for early endorsement."] }},
+    cycle7:{ prev:{conv:0.1774,calls:62,wins:11,attach:0.1111,mow:9,lt:0.1111,qa:92.33,qaCount:3}, qaComments:[{rating:"Good",text:"Good energy. Needs pitch consistency."},{rating:"Good",text:"Good price objection handling."},{rating:"Excellent",text:"Textbook call."}], insights:{ great:[{title:"Strong QA",text:"92.33% \u2014 well above threshold."},{title:"Good Conversion",text:"17.74% solid for new hire."}], improve:[{title:"Attach Critical",text:"11.11% attach very low."},{title:"Pitch Consistency",text:"Skipped value prop."}], actions:["Add attach pitch after every confirmation.","Practice pitch 3x before shift.","LT at 11.11% is good \u2014 keep it."] }}
+  }},
+  { name:"Cassandra Ramiro", initials:"CR", color:"#a855f7", training:true, tl:"Mae Garcia", cycles:{
+    cycle8:{ prev:{conv:0.1622,calls:65,wins:10,attach:null,mow:null,lt:null,qa:93.33,qaCount:3}, qaComments:[{rating:"Good",text:"Solid handling. Could improve section transitions."},{rating:"Excellent",text:"Strong customer confidence."},{rating:"Good",text:"Good energy. Pitch sounds slightly scripted."}], insights:{ great:[{title:"Consistent Conversion",text:"16.22% on 65 calls \u2014 steady production."},{title:"QA Excellence",text:"93.33% across 3 audits."}], improve:[{title:"Conversational Delivery",text:"Pitch sounds scripted. Talk naturally."},{title:"Section Transitions",text:"Need smoother bridges between sections."}], actions:["Practice pitch without the script.","Use bridge phrases between sections.","Great volume \u2014 maintain pace."] }},
+    cycle7:{ prev:{conv:0.2252,calls:111,wins:25,attach:0.3846,mow:13,lt:0.0385,qa:90,qaCount:2}, qaComments:[{rating:"Good",text:"Solid handling. Transitions could improve."},{rating:"Good",text:"Good energy. More conversational delivery needed."}], insights:{ great:[{title:"Strong Conversion",text:"22.52% with 111 calls."},{title:"Good Attach",text:"38.46% above threshold."}], improve:[{title:"Scripted Delivery",text:"More natural delivery needed."},{title:"Low LT",text:"3.85% LT is low."}], actions:["Internalize the pitch.","Add lawn treatment to pitch.","Maintain volume."] }}
+  }},
+  { name:"Dominique Tabaque", initials:"DT", color:"#f43f5e", training:true, tl:"Katie Glover", cycles:{
+    cycle8:{ prev:{conv:0.1869,calls:107,wins:20,attach:null,mow:null,lt:null,qa:69,qaCount:5}, qaComments:[{rating:"Needs Improvement",text:"Acknowledgement and active listening need work. Cross-sell incomplete."},{rating:"Needs Improvement",text:"Missed key call flow steps. No address verification."},{rating:"Needs Improvement",text:"Call control issue \u2014 customer went off-topic."},{rating:"Good",text:"Strong objection handling. Improvement in greeting."},{rating:"Needs Improvement",text:"Active listening gaps. Cross-sell incomplete."}], insights:{ great:[{title:"Conversion Improved",text:"18.69% on 107 calls \u2014 huge jump from 7.94% last cycle."},{title:"High Volume",text:"107 calls shows strong work ethic."}], improve:[{title:"QA Critically Low",text:"69% across 5 audits \u2014 4 out of 5 NI. Missing compliance steps."},{title:"Call Structure",text:"Address verification, cross-sell being skipped regularly."}], actions:["URGENT: Call flow checklist visible every call.","Always verify: Name, Address, Service area, Pricing, Closing.","Your conversion proves you can sell \u2014 now add quality.","Request QA remediation session."] }},
+    cycle7:{ prev:{conv:0.0794,calls:63,wins:5,attach:0.40,mow:5,lt:0,qa:71.33,qaCount:3}, qaComments:[{rating:"Needs Improvement",text:"Call control issue \u2014 off-topic without redirect."},{rating:"Needs Improvement",text:"Missed key steps. No address verification."},{rating:"Good",text:"Improvement \u2014 proper greeting and intro."}], insights:{ great:[{title:"Decent Attach",text:"40% on 5 wins."},{title:"Showing Improvement",text:"Latest audit Good \u2014 up from NIs."}], improve:[{title:"Conversion Needs Work",text:"7.94% well below threshold."},{title:"QA Below Standard",text:"71.33% \u2014 missing compliance steps."}], actions:["Always verify address and service area.","Practice redirecting off-topic customers.","Shadow a top performer."] }}
+  }},
+  { name:"Kenneth Banan", initials:"KB", color:"#22c55e", training:true, tl:"Melissa Maier", cycles:{
+    cycle8:{ prev:{conv:1.00,calls:1,wins:1,attach:null,mow:null,lt:null,qa:77.25,qaCount:4}, qaComments:[{rating:"Good",text:"Strong product knowledge. Slightly fast on pricing."},{rating:"Excellent",text:"One of the best calls reviewed this cycle."},{rating:"Good",text:"Strong objection handling and promo application."},{rating:"Needs Improvement",text:"Needs improvement on intro probing and detail verification."}], insights:{ great:[{title:"Strong Quality Potential",text:"One Excellent \u2014 'best call this cycle.' High ceiling."},{title:"Good Sales Instincts",text:"Strong objection handling and promo application."}], improve:[{title:"QA Dropped to 77.25%",text:"Down from 90% last cycle. NI rating for missing intro probing."},{title:"Near-Zero Volume",text:"Only 1 call is unacceptable."}], actions:["URGENT: Resolve call volume blockers.","Don't skip qualifying questions even when confident.","Target 50+ calls next cycle.","Your skills are there \u2014 be on the phones."] }},
+    cycle7:{ prev:{conv:0.1781,calls:73,wins:13,attach:0.4286,mow:14,lt:0.0714,qa:90,qaCount:3}, qaComments:[{rating:"Good",text:"Strong product knowledge. Fast on pricing."},{rating:"Good",text:"Good competitor objection handling."},{rating:"Excellent",text:"Best call this cycle. Confident delivery."}], insights:{ great:[{title:"Strong All-Around",text:"17.81% conv, 42.86% attach, 90% QA."},{title:"Excellent Quality",text:"Latest audit Excellent."}], improve:[{title:"Pricing Pace",text:"Slow down on pricing."},{title:"LT Growth",text:"7.14% LT \u2014 room to grow."}], actions:["Slow 20% on pricing.","Add LT to every qualifying call.","On track for early endorsement."] }}
+  }},
+  { name:"Maureen Tolentino", initials:"MT", color:"#d946ef", training:true, tl:"Mae Garcia", cycles:{
+    cycle8:{ prev:{conv:0.3871,calls:10,wins:3,attach:null,mow:null,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"Strong Conversion",text:"38.71% \u2014 excellent closing ability."}], improve:[{title:"Extremely Low Volume",text:"Only 10 calls."},{title:"QA Still a Concern",text:"Previous cycle 61% QA. Need new audits."}], actions:["PRIORITY: 50+ calls per cycle.","Use call flow checklist every call.","Conversion talent is real \u2014 prove it with volume and quality."] }},
+    cycle7:{ prev:{conv:0.1553,calls:103,wins:16,attach:0.1333,mow:15,lt:0,qa:61,qaCount:2}, qaComments:[{rating:"Needs Improvement",text:"Multiple compliance steps missed."},{rating:"Needs Improvement",text:"Lacked structure. Disorganized call flow."}], insights:{ great:[{title:"Good Volume",text:"103 calls shows work ethic."}], improve:[{title:"QA Critically Low",text:"61% \u2014 lowest on team."},{title:"Call Structure",text:"Inconsistent structure."}], actions:["Call flow checklist every call.","Always verify: Name, Address, Service area, Pricing, Closing.","Request QA coaching session."] }}
+  }},
+  { name:"Rona Doque", initials:"RD", color:"#0ea5e9", training:true, tl:"Mae Garcia", cycles:{
+    cycle8:{ prev:{conv:0.1776,calls:107,wins:19,attach:null,mow:null,lt:null,qa:84.25,qaCount:4}, qaComments:[{rating:"Excellent",text:"Outstanding product knowledge and objection handling."},{rating:"Excellent",text:"Good rapport and call control."},{rating:"Needs Improvement",text:"Yes/no questions on cross-sells need refinement."},{rating:"Good",text:"Solid overall. Minor cross-sell gaps."}], insights:{ great:[{title:"High Volume",text:"107 calls \u2014 highest among new hires."},{title:"Solid Conversion",text:"17.76% on high volume \u2014 steady."}], improve:[{title:"QA Just Below",text:"84.25% \u2014 painfully close to 86%. Fixable."},{title:"Cross-sell Technique",text:"Switch yes/no to open-ended questions."}], actions:["Use: 'Which service would you like \u2014 fertilization or lawn treatment?'","1.75% from commission. Tighten cross-sell execution.","Volume and conversion are strong \u2014 QA is the only gap.","Maintain 100+ calls."] }},
+    cycle7:{ prev:{conv:0.2784,calls:97,wins:27,attach:0.5517,mow:29,lt:0.1724,qa:95,qaCount:1}, qaComments:[{rating:"Excellent",text:"Exceptional \u2014 outstanding product knowledge, confident delivery."}], insights:{ great:[{title:"Top Training Performer",text:"27.84% conv, 55.17% attach, 17.24% LT, 95% QA."},{title:"Exceptional Attach & LT",text:"Both team-leading."}], improve:[{title:"Only 1 Audit",text:"Small sample."}], actions:["Keep doing what you're doing.","Consider mentoring newer agents.","Push for 100+ calls."] }}
+  }},
+  { name:"Chivy Llanto", initials:"CL", color:"#fb923c", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:0.1875,calls:56,wins:6,attach:null,mow:null,lt:null,qa:52,qaCount:1}, qaComments:[{rating:"Needs Improvement",text:"Needs work on intro probing and policy pause timing. Cross-sell section incomplete."}], insights:{ great:[{title:"Above-Threshold Conversion",text:"18.75% on 56 calls \u2014 solid start above 17%."}], improve:[{title:"QA Critically Low",text:"52% on 1 audit \u2014 lowest on team. Intro probing, pauses, cross-sell all need work."}], actions:["URGENT: Study call flow checklist before every shift.","Focus on intro probing \u2014 qualify before pitching.","Complete cross-sell section every call.","Request additional QA coaching."] }}
+  }},
+  { name:"Jewel Argullozos", initials:"JA", color:"#c084fc", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:0.15,calls:74,wins:11,attach:null,mow:null,lt:null,qa:90,qaCount:1}, qaComments:[{rating:"Good",text:"Polite and helpful. Audio volume issues. Incomplete service coverage explanation."}], insights:{ great:[{title:"Meeting Thresholds",text:"15% conversion and 90% QA out of the gate."},{title:"Good Volume",text:"74 calls shows commitment."}], improve:[{title:"Audio Quality",text:"QA noted volume issues. Check headset."},{title:"Service Coverage",text:"Explanation was incomplete."}], actions:["Fix audio setup \u2014 test before each shift.","Practice full service coverage explanation.","Push for 80+ calls.","Great foundation \u2014 keep this up."] }}
+  }},
+  { name:"Rufaro Moloi", initials:"RM", color:"#34d399", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:0.1509,calls:106,wins:16,attach:null,mow:null,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[{title:"High Volume",text:"106 calls \u2014 outstanding work ethic."},{title:"Above-Threshold Conversion",text:"15.09% on 106 calls with 16 wins."}], improve:[{title:"No QA Data",text:"No audits yet. Need QA scores for full picture."}], actions:["Request QA audits.","Maintain this call volume.","Focus on improving conversion above 18%."] }}
+  }},
+  { name:"Marivic Rahman", initials:"MR", color:"#f472b6", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:null,calls:0,wins:0,attach:null,mow:null,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[], improve:[{title:"No Data Available",text:"No calls recorded yet. May be in onboarding."}], actions:["Confirm onboarding status and queue assignment.","Ensure system access is set up.","Get on phones ASAP."] }}
+  }},
+  { name:"Arlene Mendote", initials:"AM", color:"#818cf8", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:null,calls:0,wins:0,attach:null,mow:null,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[], improve:[{title:"No Data Available",text:"No calls recorded yet. May be in onboarding."}], actions:["Confirm onboarding status and queue assignment.","Ensure system access is set up.","Get on phones ASAP."] }}
+  }},
+  { name:"Jonelle Laude", initials:"JL", color:"#2dd4bf", training:true, tl:"Christian Umali", cycles:{
+    cycle8:{ prev:{conv:null,calls:0,wins:0,attach:null,mow:null,lt:null,qa:null,qaCount:0}, qaComments:[], insights:{ great:[], improve:[{title:"No Data Available",text:"No calls recorded yet. May be in onboarding."}], actions:["Confirm onboarding status and queue assignment.","Ensure system access is set up.","Get on phones ASAP."] }}
+  }}
 ];
 
-/* ── Helpers ── */
-function fmtPct(v) {
-  if (v === null || v === undefined) return '\u2014';
-  return (v * 100).toFixed(2) + '%';
+/* ═══════════════════════════════════════════════════════
+   GOOGLE SHEETS LIVE FETCH (JSONP via gviz/tq)
+   ═══════════════════════════════════════════════════════ */
+function fetchSheet(key) {
+  return new Promise(resolve => {
+    const cfg = SHEET_CONFIG[key];
+    const cb = 'gviz_' + key + '_' + Date.now();
+    const timeout = setTimeout(() => { delete window[cb]; resolve(null); }, 12000);
+    window[cb] = resp => { clearTimeout(timeout); delete window[cb]; resolve(resp); };
+    const s = document.createElement('script');
+    s.src = `https://docs.google.com/spreadsheets/d/${cfg.id}/gviz/tq?tqx=responseHandler:${cb}&gid=${cfg.gid}`;
+    s.onerror = () => { clearTimeout(timeout); delete window[cb]; resolve(null); };
+    document.body.appendChild(s);
+  });
 }
-function fmtQa(v) {
-  if (v === null || v === undefined) return '\u2014';
-  return v.toFixed(2) + '%';
+
+function cellVal(row, i) {
+  if (!row || !row.c || !row.c[i]) return null;
+  return row.c[i].v;
 }
+
+function findAgentRow(table, name) {
+  const [first, last] = name.split(' ');
+  for (const row of table.rows) {
+    const v = cellVal(row, 0);
+    if (v && typeof v === 'string' && v.includes(first) && v.includes(last)) return row;
+  }
+  return null;
+}
+
+function scanRowMetrics(row) {
+  /* Scan an agent row for metrics. Strategy:
+     - Percentage values (0 < v < 1) are conversion/attach/LT rates
+     - QA-like values (40-100) are QA scores
+     - Small integers are wins, larger integers are calls
+     - We look at the first "cluster" of non-null values after col 2 (personal metrics area) */
+  if (!row || !row.c) return {};
+  const pcts = [], ints = [];
+  for (let i = 3; i < Math.min(row.c.length, 20); i++) { // Personal metrics area
+    const v = cellVal(row, i);
+    if (v === null || typeof v !== 'number') continue;
+    if (v > 0 && v < 1) pcts.push(v);
+    else if (v >= 1 && v === Math.floor(v)) ints.push(v);
+  }
+  return { pcts, ints };
+}
+
+async function fetchLiveData() {
+  const statusEl = document.getElementById('dataStatus');
+  try {
+    const [convResp, qaResp, attachResp] = await Promise.all([
+      fetchSheet('conversion'), fetchSheet('qa'), fetchSheet('attach')
+    ]);
+
+    let updated = 0;
+
+    // Parse conversion data
+    if (convResp && convResp.status === 'ok') {
+      const table = convResp.table;
+      for (const agent of AGENTS) {
+        const row = findAgentRow(table, agent.name);
+        if (!row) continue;
+        const m = scanRowMetrics(row);
+        if (agent.cycles.cycle8 && (m.pcts.length > 0 || m.ints.length > 0)) {
+          const p = agent.cycles.cycle8.prev;
+          if (m.pcts.length > 0) p.conv = m.pcts[m.pcts.length - 1]; // Last pct in personal area
+          if (m.ints.length >= 2) {
+            // Larger int = calls, smaller = wins (heuristic)
+            const sorted = [...m.ints].sort((a, b) => b - a);
+            p.calls = sorted[0];
+            p.wins = sorted[1];
+          }
+          updated++;
+        }
+      }
+    }
+
+    // Parse QA data
+    if (qaResp && qaResp.status === 'ok') {
+      const table = qaResp.table;
+      for (const agent of AGENTS) {
+        const row = findAgentRow(table, agent.name);
+        if (!row) continue;
+        // Scan for QA scores (numbers between 0-100)
+        const scores = [];
+        for (let i = 2; i < row.c.length; i++) {
+          const v = cellVal(row, i);
+          if (typeof v === 'number' && v >= 0 && v <= 100) scores.push(v);
+        }
+        if (scores.length > 0 && agent.cycles.cycle8) {
+          const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+          agent.cycles.cycle8.prev.qa = Math.round(avg * 100) / 100;
+          agent.cycles.cycle8.prev.qaCount = scores.length;
+          updated++;
+        }
+      }
+    }
+
+    // Parse attach data
+    if (attachResp && attachResp.status === 'ok') {
+      const table = attachResp.table;
+      for (const agent of AGENTS) {
+        const row = findAgentRow(table, agent.name);
+        if (!row) continue;
+        const m = scanRowMetrics(row);
+        if (agent.cycles.cycle8 && m.pcts.length > 0) {
+          agent.cycles.cycle8.prev.attach = m.pcts[m.pcts.length - 1]; // Last pct
+          if (m.ints.length > 0) agent.cycles.cycle8.prev.mow = m.ints[0];
+          updated++;
+        }
+      }
+    }
+
+    // Recalculate commission for all agents based on live data + thresholds
+    for (const agent of AGENTS) {
+      if (!agent.cycles.cycle8) continue;
+      const p = agent.cycles.cycle8.prev;
+      const reasons = [];
+      if (p.conv !== null && p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
+      if (p.attach !== null && p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
+      if (p.qa !== null && p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
+      if (p.calls === 0 && p.conv === null) reasons.push('No calls logged');
+      agent.cycles.cycle8.commissionMet = reasons.length === 0 && p.calls > 0;
+      agent.cycles.cycle8.commissionReason = reasons.length > 0 ? reasons.join('; ') : null;
+    }
+
+    if (updated > 0) {
+      statusEl.className = 'data-status live';
+      statusEl.innerHTML = '<span class="dot"></span> Live data (' + new Date().toLocaleTimeString() + ')';
+    } else {
+      statusEl.className = 'data-status cached';
+      statusEl.innerHTML = '<span class="dot"></span> Using cached data';
+    }
+    return updated > 0;
+  } catch (e) {
+    console.error('Live fetch error:', e);
+    statusEl.className = 'data-status cached';
+    statusEl.innerHTML = '<span class="dot"></span> Using cached data';
+    return false;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDERING
+   ═══════════════════════════════════════════════════════ */
+function fmtPct(v) { return v === null || v === undefined ? '\u2014' : (v * 100).toFixed(2) + '%'; }
+function fmtQa(v) { return v === null || v === undefined ? '\u2014' : v.toFixed(2) + '%'; }
 function metClass(val, threshold, isQa) {
   if (val === null || val === undefined) return 'neutral-color';
-  const v = isQa ? val : val * 100;
-  const t = isQa ? threshold : threshold * 100;
+  const v = isQa ? val : val * 100, t = isQa ? threshold : threshold * 100;
   return v >= t ? 'met-color' : 'not-met-color';
 }
-function ratingDotClass(rating) {
-  const r = rating.toLowerCase();
-  if (r.includes('excellent')) return 'rating-excellent';
-  if (r.includes('good')) return 'rating-good';
-  return 'rating-ni';
+function ratingDotClass(r) {
+  r = r.toLowerCase();
+  return r.includes('excellent') ? 'rating-excellent' : r.includes('good') ? 'rating-good' : 'rating-ni';
 }
 
-/* ── Render ── */
 function renderAgent(agent, cycleKey) {
-  const cycleData = agent.cycles[cycleKey];
-  const selectedCycle = CYCLES.find(c => c.key === cycleKey);
-  const cycleLabel = selectedCycle ? `${selectedCycle.start} \u2013 ${selectedCycle.end}` : '';
-  const subtitle = agent.training ? `New Hire \u2014 under ${agent.tl}` : 'Tenured Agent';
+  const cd = agent.cycles[cycleKey];
+  const sel = CYCLES.find(c => c.key === cycleKey);
+  const label = sel ? `${sel.start} \u2013 ${sel.end}` : '';
+  const sub = agent.training ? `New Hire \u2014 under ${agent.tl}` : 'Tenured Agent';
 
-  if (!cycleData) {
-    return `
-      <div class="agent-header">
-        <div class="agent-avatar" style="background:${agent.color}">${agent.initials}</div>
-        <div>
-          <h2>${agent.name} <span class="hire-badge ${agent.training ? 'new-hire' : 'tenured'}">${agent.training ? 'NEW HIRE' : 'TENURED'}</span></h2>
-          <div class="subtitle">${subtitle}</div>
-        </div>
-      </div>
-      <div class="no-data">
-        <h3>No data for this cycle</h3>
-        <p>This agent does not have coaching data for the selected cycle.</p>
-      </div>`;
-  }
+  if (!cd) return `
+    <div class="agent-header">
+      <div class="agent-avatar" style="background:${agent.color}">${agent.initials}</div>
+      <div><h2>${agent.name} <span class="hire-badge ${agent.training?'new-hire':'tenured'}">${agent.training?'NEW HIRE':'TENURED'}</span></h2><div class="subtitle">${sub}</div></div>
+    </div>
+    <div class="no-data"><h3>No data for this cycle</h3><p>This agent does not have coaching data for the selected cycle.</p></div>`;
 
-  const p = cycleData.prev;
-  const convDisplay = p.conv !== null ? fmtPct(p.conv) : '\u2014';
-  const attachDisplay = p.attach !== null ? fmtPct(p.attach) : '\u2014';
-  const ltDisplay = p.lt !== null ? fmtPct(p.lt) : '\u2014';
-  const qaDisplay = p.qa !== null ? fmtQa(p.qa) : '\u2014';
+  const p = cd.prev;
+  // Recalculate commission dynamically
+  const reasons = [];
+  if (p.conv !== null && p.conv < THRESHOLDS.conv) reasons.push(`Conv ${(p.conv*100).toFixed(2)}% below ${THRESHOLDS.conv*100}%`);
+  if (p.attach !== null && p.attach < THRESHOLDS.attach) reasons.push(`Attach ${(p.attach*100).toFixed(2)}% below ${THRESHOLDS.attach*100}%`);
+  if (p.qa !== null && p.qa < THRESHOLDS.qa) reasons.push(`QA ${p.qa.toFixed(2)}% below ${THRESHOLDS.qa}%`);
+  if (p.calls === 0 && p.conv === null) reasons.push('No calls logged');
+  const commMet = reasons.length === 0 && p.calls > 0;
+  const commReason = reasons.join('; ');
 
-  const qaSection = cycleData.qaComments.length > 0 ? `
+  const qaHtml = cd.qaComments.length > 0 ? `
     <div class="section-title">QA Audit Highlights</div>
-    <div class="qa-quotes">
-      ${cycleData.qaComments.map(q => `
-        <div class="qa-quote">
-          <div class="rating-dot ${ratingDotClass(q.rating)}"></div>
-          <div>
-            <div class="quote-text">${q.text}</div>
-            <div class="quote-rating" style="color:${q.rating.toLowerCase().includes('excellent') ? '#4ade80' : q.rating.toLowerCase().includes('good') ? '#3b82f6' : '#f87171'}">${q.rating}</div>
-          </div>
-        </div>`).join('')}
-    </div>` : '';
+    <div class="qa-quotes">${cd.qaComments.map(q => `
+      <div class="qa-quote"><div class="rating-dot ${ratingDotClass(q.rating)}"></div><div>
+        <div class="quote-text">${q.text}</div>
+        <div class="quote-rating" style="color:${q.rating.toLowerCase().includes('excellent')?'#4ade80':q.rating.toLowerCase().includes('good')?'#3b82f6':'#f87171'}">${q.rating}</div>
+      </div></div>`).join('')}</div>` : '';
 
-  const greatSection = cycleData.insights.great.length > 0 ? `
+  const greatHtml = cd.insights.great.length > 0 ? `
     <div class="section-title">What Went Great</div>
-    <div class="insights-grid">
-      ${cycleData.insights.great.map(i => `
-        <div class="insight-card great"><h4>${i.title}</h4><p>${i.text}</p></div>`).join('')}
-    </div>` : '';
+    <div class="insights-grid">${cd.insights.great.map(i=>`<div class="insight-card great"><h4>${i.title}</h4><p>${i.text}</p></div>`).join('')}</div>` : '';
 
   return `
     <div class="agent-header">
       <div class="agent-avatar" style="background:${agent.color}">${agent.initials}</div>
-      <div>
-        <h2>${agent.name} <span class="hire-badge ${agent.training ? 'new-hire' : 'tenured'}">${agent.training ? 'NEW HIRE' : 'TENURED'}</span></h2>
-        <div class="subtitle">${subtitle}</div>
-      </div>
-      <div class="commission-badge ${cycleData.commissionMet ? 'met' : 'not-met'}">
-        ${cycleData.commissionMet ? '\u2713 INCENTIVE QUALIFIED' : '\u2717 INCENTIVE NOT QUALIFIED'}
-      </div>
+      <div><h2>${agent.name} <span class="hire-badge ${agent.training?'new-hire':'tenured'}">${agent.training?'NEW HIRE':'TENURED'}</span></h2><div class="subtitle">${sub}</div></div>
+      <div class="commission-badge ${commMet?'met':'not-met'}">${commMet?'\u2713 INCENTIVE QUALIFIED':'\u2717 INCENTIVE NOT QUALIFIED'}</div>
     </div>
-
-    <div class="section-title">Cycle Metrics (${cycleLabel})</div>
+    <div class="section-title">Cycle Metrics (${label})</div>
     <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="label">Conversion</div>
-        <div class="value ${metClass(p.conv, 0.15, false)}">${convDisplay}</div>
-        <div class="detail">${p.wins} wins / ${p.calls} calls</div>
-      </div>
-      <div class="metric-card">
-        <div class="label">All-In Attach</div>
-        <div class="value ${metClass(p.attach, 0.35, false)}">${attachDisplay}</div>
-        <div class="detail">${p.mow !== null ? p.mow + ' mow services' : 'No data'}</div>
-      </div>
-      <div class="metric-card">
-        <div class="label">Lawn Treatment</div>
-        <div class="value ${metClass(p.lt, 0.06, false)}">${ltDisplay}</div>
-        <div class="detail">LT add-on rate</div>
-      </div>
-      <div class="metric-card">
-        <div class="label">Quality Score</div>
-        <div class="value ${metClass(p.qa, 86, true)}">${qaDisplay}</div>
-        <div class="detail">${p.qaCount} audit${p.qaCount !== 1 ? 's' : ''} this cycle</div>
-      </div>
+      <div class="metric-card"><div class="label">Conversion</div><div class="value ${metClass(p.conv,THRESHOLDS.conv,false)}">${fmtPct(p.conv)}</div><div class="detail">${p.wins} wins / ${p.calls} calls</div></div>
+      <div class="metric-card"><div class="label">All-In Attach</div><div class="value ${metClass(p.attach,THRESHOLDS.attach,false)}">${fmtPct(p.attach)}</div><div class="detail">${p.mow!==null?p.mow+' mow services':'No data'}</div></div>
+      <div class="metric-card"><div class="label">Lawn Treatment</div><div class="value ${metClass(p.lt,THRESHOLDS.lt,false)}">${fmtPct(p.lt)}</div><div class="detail">LT add-on rate</div></div>
+      <div class="metric-card"><div class="label">Quality Score</div><div class="value ${metClass(p.qa,THRESHOLDS.qa,true)}">${fmtQa(p.qa)}</div><div class="detail">${p.qaCount} audit${p.qaCount!==1?'s':''} this cycle</div></div>
     </div>
-
-    ${greatSection}
-
+    ${greatHtml}
     <div class="section-title">Areas to Improve</div>
-    <div class="insights-grid">
-      ${cycleData.insights.improve.map(i => `
-        <div class="insight-card improve"><h4>${i.title}</h4><p>${i.text}</p></div>`).join('')}
-    </div>
-
-    ${qaSection}
-
+    <div class="insights-grid">${cd.insights.improve.map(i=>`<div class="insight-card improve"><h4>${i.title}</h4><p>${i.text}</p></div>`).join('')}</div>
+    ${qaHtml}
     <div class="section-title">Action Items for Next Cycle</div>
-    <div class="action-items">
-      <h4>Focus Areas</h4>
-      <ul>
-        ${cycleData.insights.actions.map(a => `<li>${a}</li>`).join('')}
-      </ul>
-    </div>
-
-    ${cycleData.commissionMet === false && cycleData.commissionReason ? `
-    <div style="background:#1a1d2e;border:1px solid #f8717133;border-radius:10px;padding:14px 18px;margin-bottom:20px;">
-      <span style="color:#f87171;font-weight:700;font-size:13px;">Commission Note:</span>
-      <span style="color:#b0b4c8;font-size:13px;"> ${cycleData.commissionReason}</span>
-    </div>` : ''}
-
-    <a class="form-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdcDelIpMsLNTYS6h_YzblWhtsgt-cZh2xFfR1uzyuhUDyxsw/viewform" target="_blank">
-      CLICK HERE to fill out ${agent.name.split(' ')[0]}'s 1-on-1 and Coaching Log
-    </a>
-  `;
+    <div class="action-items"><h4>Focus Areas</h4><ul>${cd.insights.actions.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+    ${!commMet && commReason ? `<div style="background:#1a1d2e;border:1px solid #f8717133;border-radius:10px;padding:14px 18px;margin-bottom:20px"><span style="color:#f87171;font-weight:700;font-size:13px">Commission Note:</span> <span style="color:#b0b4c8;font-size:13px">${commReason}</span></div>` : ''}
+    <a class="form-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdcDelIpMsLNTYS6h_YzblWhtsgt-cZh2xFfR1uzyuhUDyxsw/viewform" target="_blank">CLICK HERE to fill out ${agent.name.split(' ')[0]}'s 1-on-1 and Coaching Log</a>`;
 }
 
-/* ── Init ── */
-function init() {
+/* ═══════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════ */
+async function init() {
   const tabsEl = document.getElementById('agentTabs');
   const contentEl = document.getElementById('agentContent');
   const cycleSelect = document.getElementById('cycleSelect');
 
-  CYCLES.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.key;
-    opt.textContent = c.label;
-    cycleSelect.appendChild(opt);
-  });
+  CYCLES.forEach(c => { const o = document.createElement('option'); o.value = c.key; o.textContent = c.label; cycleSelect.appendChild(o); });
 
-  let activeAgent = AGENTS[0];
-  let currentFilter = 'all';
-  let currentCycle = CYCLES[0].key;
+  let activeAgent = AGENTS[0], currentFilter = 'all', currentCycle = CYCLES[0].key;
 
-  function getFilteredAgents() {
+  function filtered() {
     if (currentFilter === 'new-hire') return AGENTS.filter(a => a.training);
     if (currentFilter === 'tenured') return AGENTS.filter(a => !a.training);
     return AGENTS;
   }
-
   function renderTabs() {
     tabsEl.innerHTML = '';
-    const filtered = getFilteredAgents();
-    if (!filtered.includes(activeAgent) && filtered.length > 0) activeAgent = filtered[0];
-    filtered.forEach(agent => {
-      const tab = document.createElement('div');
-      tab.className = 'agent-tab' + (agent === activeAgent ? ' active' : '') + (agent.training ? ' training' : '');
-      tab.textContent = agent.name.split(' ')[0];
-      tab.addEventListener('click', () => { activeAgent = agent; renderTabs(); renderContent(); });
-      tabsEl.appendChild(tab);
+    const f = filtered();
+    if (!f.includes(activeAgent) && f.length) activeAgent = f[0];
+    f.forEach(a => {
+      const t = document.createElement('div');
+      t.className = 'agent-tab' + (a===activeAgent?' active':'') + (a.training?' training':'');
+      t.textContent = a.name.split(' ')[0];
+      t.onclick = () => { activeAgent=a; renderTabs(); renderContent(); };
+      tabsEl.appendChild(t);
     });
   }
-
   function renderContent() {
-    const filtered = getFilteredAgents();
-    if (filtered.length === 0) {
-      contentEl.innerHTML = '<div class="no-data"><h3>No agents match this filter</h3></div>';
-      return;
-    }
+    const f = filtered();
+    if (!f.length) { contentEl.innerHTML = '<div class="no-data"><h3>No agents match this filter</h3></div>'; return; }
     contentEl.innerHTML = renderAgent(activeAgent, currentCycle);
   }
 
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderTabs();
-      renderContent();
-    });
+  document.querySelectorAll('.filter-btn').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentFilter = b.dataset.filter;
+    renderTabs(); renderContent();
   });
+  cycleSelect.onchange = () => { currentCycle = cycleSelect.value; renderContent(); };
 
-  cycleSelect.addEventListener('change', () => { currentCycle = cycleSelect.value; renderContent(); });
+  // Initial render with static data
+  renderTabs(); renderContent();
 
-  renderTabs();
-  renderContent();
+  // Attempt live data fetch, then re-render
+  const gotLive = await fetchLiveData();
+  if (gotLive) { renderTabs(); renderContent(); }
 }
 
 init();
