@@ -528,6 +528,11 @@ function renderAgent(agent, cycleKey) {
     <div class="section-title">Action Items for Next Cycle</div>
     <div class="action-items"><h4>Focus Areas</h4><ul>${cd.insights.actions.map(a=>`<li>${a}</li>`).join('')}</ul></div>
     ${cd.coachingTip ? `<div class="section-title">Attach Best Practice</div><div class="coaching-tip"><h4>\ud83d\udca1 My Approach</h4><div class="tip-text">${cd.coachingTip}</div><div class="tip-author">\u2014 ${agent.name}</div></div>` : ''}
+    ${(!cd.coachingTip && agent.training) ? (() => {
+      const tips = AGENTS.filter(a => a.cycles[cycleKey] && a.cycles[cycleKey].coachingTip && a.name !== agent.name)
+        .map(a => `<div class="coaching-tip"><h4>\ud83d\udca1 ${a.name.split(' ')[0]}'s Approach</h4><div class="tip-text">${a.cycles[cycleKey].coachingTip}</div><div class="tip-author">\u2014 ${a.name}</div></div>`).join('');
+      return tips ? `<div class="section-title">Tips from Top Performers</div>${tips}` : '';
+    })() : ''}
     ${!commMet && commReason ? `<div style="background:#1a1d2e;border:1px solid #f8717133;border-radius:10px;padding:14px 18px;margin-bottom:20px"><span style="color:#f87171;font-weight:700;font-size:13px">Commission Note:</span> <span style="color:#b0b4c8;font-size:13px">${commReason}</span></div>` : ''}
     <a class="form-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdcDelIpMsLNTYS6h_YzblWhtsgt-cZh2xFfR1uzyuhUDyxsw/viewform" target="_blank">CLICK HERE to fill out ${agent.name.split(' ')[0]}'s 1-on-1 and Coaching Log</a>`;
 }
